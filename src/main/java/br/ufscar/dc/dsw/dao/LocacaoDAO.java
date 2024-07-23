@@ -16,7 +16,7 @@ public class LocacaoDAO extends GeralDAO{
 
      public List<Locacao> getAll() {
         List<Locacao> listaLocacoes = new ArrayList<>();
-        String sqlQuery = "SELECT * FROM locacao;";
+        String sqlQuery = "SELECT * FROM Locacao;";
 
         try {
             Connection conn = this.getConnection();

@@ -2,7 +2,7 @@ package br.ufscar.dc.dsw.domain;
 
 import java.sql.Date;
 
-public class Cliente extends Usuario{
+public class Cliente extends Usuario {
     private String telefone;
     private String sexo;
     private Date dataNascimento;

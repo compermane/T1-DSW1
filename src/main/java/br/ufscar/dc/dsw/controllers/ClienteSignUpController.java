@@ -14,7 +14,7 @@ import br.ufscar.dc.dsw.dao.ClienteDAO;
 import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.domain.Cliente;
 
-@WebServlet(urlPatterns = { "/registrar-cliente/*" })
+@WebServlet(urlPatterns = { "/signUp-cliente/*" })
 public class ClienteSignUpController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -62,7 +62,7 @@ public class ClienteSignUpController extends HttpServlet {
     }
 
     private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroUsuario/cliente/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_cliente.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -75,17 +75,18 @@ public class ClienteSignUpController extends HttpServlet {
             if (daoUsuario.getUserByEmail(email) != null) {
                 String mensagemErro = "O email já está em uso.";
                 request.setAttribute("mensagemErro", mensagemErro);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroUsuario/cliente/formulario.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_cliente.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
 
-            String CPF = request.getParameter("CPF");
+            String CPF = request.getParameter("cpf");
+
             // Verificar se o CPF já existe
             if (daoCliente.getClienteByCPF(CPF) != null) {
                 String mensagemErro = "O CPF já está em uso.";
                 request.setAttribute("mensagemErro", mensagemErro);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroUsuario/cliente/formulario.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_cliente.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
@@ -95,6 +96,7 @@ public class ClienteSignUpController extends HttpServlet {
 
             String administrador = request.getParameter("administrador");
             boolean admin = false;
+
             if (administrador == null || administrador == "0") {
                 admin = false;
             }
@@ -102,19 +104,25 @@ public class ClienteSignUpController extends HttpServlet {
                 admin = true;
             }
 
-            Usuario usuario = new Usuario(email, senha, nome, admin, false);
+            Usuario usuario = new Usuario(email, CPF, senha, nome, admin, false);
             daoUsuario.insertUser(usuario);
+            
+            System.out.println("\nUsuário inserido com sucesso.\n");
 
             String telefone = request.getParameter("telefone");
             String sexo = request.getParameter("sexo");
             SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd");
+            
             java.util.Date data_sem_formatar = reFormat.parse(request.getParameter("dataNascimento"));
             java.sql.Date dataNascimento = new java.sql.Date(data_sem_formatar.getTime());
             usuario = daoUsuario.getUserByEmail(email);
 
             Cliente cliente = new Cliente(usuario.getId(), CPF, email, senha, nome, 
-                              admin, false, telefone, sexo, dataNascimento);
+                                          admin, false, telefone, sexo, dataNascimento);
             daoCliente.insertCliente(cliente);
+
+            System.out.println("\nCliente inserido com sucesso.\n");
+            
             response.sendRedirect(request.getContextPath() + "/index.jsp");
 
         } catch (ParseException | RuntimeException | IOException e) {

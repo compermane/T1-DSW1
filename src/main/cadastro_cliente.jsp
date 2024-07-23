@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Cadastro de Cliente</h1>
-    <form action="CadastroCliente" method="post">
+    <form action="${pageContext.request.contextPath}/signUp-cliente/insercao" method="post">
         <h1> POR FAVOR, INSIRA OS SEGUINTES DADOS:</h1>
 
         <label for="email">Email:</label>

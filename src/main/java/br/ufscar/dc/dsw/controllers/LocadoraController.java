@@ -69,6 +69,7 @@ public class LocadoraController extends HttpServlet {
             }
         } 
         catch (RuntimeException | IOException | ServletException e) {
+
             throw new ServletException(e);
         }
     }
@@ -136,7 +137,7 @@ public class LocadoraController extends HttpServlet {
                 admin = true;
             }
 
-            Usuario usuario = new Usuario(email, senha, nome, admin, true);
+            Usuario usuario = new Usuario(email, cnpj, senha, nome, admin, true);
             daoUsuario.insertUser(usuario);
 
             usuario = daoUsuario.getUserByEmail(email);

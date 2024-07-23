@@ -15,7 +15,7 @@ abstract public class GeralDAO {
     }
 
     protected Connection getConnection() throws SQLException {
-        String db_url = "jdbc:mysql://localhost:8080/T1-DSW1";
+        String db_url = "jdbc:mysql://localhost:8080/T1_DSW1";
         try {
             return DriverManager.getConnection(db_url, "eugenio", "aA@12345");
         }

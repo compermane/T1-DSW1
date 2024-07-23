@@ -15,7 +15,8 @@ public class ClienteDAO extends GeralDAO {
     public List<Cliente> getAll() {
         List<Cliente> listaClientes = new ArrayList<>();
 
-        String sqlQuery = "SELECT * FROM Cliente;";
+        // SELECT l.id_locadora, u.nome, u.senha, u.email, l.CNPJ, l.cidade,  u.isAdmin, u.isLocadora FROM Locadora l JOIN Usuario u ON l.id_locadora = u.id;";
+        String sqlQuery = "SELECT c.id_cliente, u.nome, u.senha, u.email, c.CPF, c.sexo, c.telefone, c.data_nascimento, u.isAdmin, u.isLocadora FROM Cliente c JOIN Usuario u ON c.id_cliente = u.id;";
 
         try {
             Connection conn = this.getConnection();
@@ -25,7 +26,7 @@ public class ClienteDAO extends GeralDAO {
 
             while(resultSet.next()) {
                 int id = resultSet.getInt("id_usuario");
-                String documento = resultSet.getString("documento");
+                String documento = resultSet.getString("CPF");
                 String email = resultSet.getString("email");
                 String senha = resultSet.getString("senha");
                 String nome = resultSet.getString("nome");
@@ -119,17 +120,20 @@ public class ClienteDAO extends GeralDAO {
     public void insertCliente(Cliente cliente){
         try {
             Connection conn = this.getConnection();
-            String sqlQuery = "INSERT INTO Cliente (CPF, sexo, telefone, data_nascimento) VALUES (?, ?, ?, ?);";
+
+            String sqlQuery = "INSERT INTO Cliente (id_usuario, CPF, sexo, telefone, data_nascimento) VALUES (?, ?, ?, ?, ?);";
             PreparedStatement stmt = conn.prepareStatement(sqlQuery);
 
-            stmt.setString(1, cliente.getDocumento());
-            stmt.setString(2, cliente.getSexo());
-            stmt.setString(3, cliente.getTelefone());
-            stmt.setDate(4, cliente.getDataNascimento());
+            stmt.setInt(1, cliente.getId());
+            stmt.setString(2, cliente.getDocumento());
+            stmt.setString(3, cliente.getSexo());
+            stmt.setString(4, cliente.getTelefone());
+            stmt.setDate(5, cliente.getDataNascimento());
             stmt.executeUpdate();
 
             stmt.close();
             conn.close();
+            System.out.println("\nCliente cadastrado com sucesso.");
         } 
         catch (SQLException e) {
             throw new RuntimeException(e);

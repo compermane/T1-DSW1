@@ -1,3 +1,8 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,7 +12,7 @@
 </head>
 <body>
     <h1>Cadastro de Cliente</h1>
-    <form action="CadastroCliente" method="post">
+    <form action="${pageContext.request.contextPath}/signUp-cliente/insercao" method="post">
         <h1> POR FAVOR, INSIRA OS SEGUINTES DADOS:</h1>
 
         <label for="email">Email:</label>
@@ -26,7 +31,10 @@
         <input type="text" id="telefone" name="telefone" required><br>
 
         <label for="sexo">Sexo:</label>
-        <input type="text" id="sexo" name="sexo" required><br>
+        <select id="sexo" name="sexo" required>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+        </select>
 
         <label for="dataNascimento">Data de Nascimento:</label>
         <input type="date" id="dataNascimento" name="dataNascimento" required><br>
