@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet(urlPatterns = { "/registrar-locadora/*" })
+@WebServlet(name = "LocadoraSignUpController", urlPatterns = { "/signUp-locadora/*" })
 public class LocadoraSignUpController extends HttpServlet {
     
     private static final long serialVersionUID = 1L;
@@ -28,22 +28,19 @@ public class LocadoraSignUpController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        System.out.println("PASSEI POR: CadastroLocadoraController");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String action = request.getPathInfo();
-        System.out.println("ACTION -> " + request.getPathInfo());
         if (action == null) {
             action = "";
         }
-    
+        
+        System.out.println("action: " + action);
         try {
             switch (action) {
                 case "/cadastro":
@@ -58,15 +55,22 @@ public class LocadoraSignUpController extends HttpServlet {
                     apresentaFormCadastro(request, response);
                     break;
             }
-        } catch (RuntimeException | IOException | ServletException e) {
+        } 
+        catch (RuntimeException | IOException | ServletException e) {
             throw new ServletException(e);
         }
     }
 
     private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getSession().setAttribute("listaLocadoras", new LocadoraDAO().getAll());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroUsuario/locadora/formulario.jsp");
-        dispatcher.forward(request, response);
+
+        try {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_locadora.jsp");
+            dispatcher.forward(request, response);
+        }
+        catch(RuntimeException | IOException | ServletException e) {
+            throw new ServletException(e);
+        }
     }
 
     private void insere(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -79,18 +83,19 @@ public class LocadoraSignUpController extends HttpServlet {
             if(daoUsuario.getUserByEmail(email) != null) {
                 String mensagemErro = "O email já está em uso.";
                 request.setAttribute("mensagemErro", mensagemErro);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroUsuario/locadora/formulario.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_locadora.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
 
             String cnpj = request.getParameter("cnpj");
-            // Verificar se o CPF já existe
+
             if(daoLocadora.getLocadoraByCNPJ(cnpj) != null) {
                 String mensagemErro = "O CNPJ já está em uso.";
                 request.setAttribute("mensagemErro", mensagemErro);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroUsuario/locadora/formulario.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_locadora.jsp");
                 dispatcher.forward(request, response);
+
                 return;
             }
 
@@ -107,8 +112,9 @@ public class LocadoraSignUpController extends HttpServlet {
                 admin = true;
             }
 
-            Usuario usuario = new Usuario(email, senha, nome, admin, true);
+            Usuario usuario = new Usuario(email, cnpj, senha, nome, admin, true);
             daoUsuario.insertUser(usuario);
+            System.out.println("id: " + usuario.getId());
             usuario = daoUsuario.getUserByEmail(email);
 
             String cidade = request.getParameter("cidade");

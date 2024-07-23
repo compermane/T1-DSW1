@@ -158,6 +158,7 @@ public class UsuarioDAO extends GeralDAO {
             stmt.setBoolean(5, user.getAdmin());
             stmt.setBoolean(6, user.getIsLocadora());
             stmt.executeUpdate();
+            
             stmt.close();
             conn.close();
         } 

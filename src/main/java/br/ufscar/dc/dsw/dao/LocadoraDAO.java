@@ -14,7 +14,7 @@ public class LocadoraDAO extends GeralDAO {
     public List<Locadora> getAll() {
         List<Locadora> listaLocadoras = new ArrayList<>();
 
-        String sqlQuery = "SELECT * FROM Locadora;";
+        String sqlQuery = "SELECT l.id_locadora, u.nome, u.senha, u.email, l.CNPJ, l.cidade,  u.isAdmin, u.isLocadora FROM Locadora l JOIN Usuario u ON l.id_locadora = u.id;";
 
         try {
             Connection conn = this.getConnection();
@@ -112,11 +112,12 @@ public class LocadoraDAO extends GeralDAO {
     public void insertLocadora(Locadora locadora){
         try {
             Connection conn = this.getConnection();
-            String sqlQuery = "INSERT INTO Locadora (CNPJ, cidade) VALUES (?, ?);";
+            String sqlQuery = "INSERT INTO Locadora (id_locadora, CNPJ, cidade) VALUES (?, ?, ?);";
             PreparedStatement stmt = conn.prepareStatement(sqlQuery);
 
-            stmt.setString(2, locadora.getCidade());
-            stmt.setString(1, locadora.getDocumento());
+            stmt.setInt(1, locadora.getId());
+            stmt.setString(2, locadora.getDocumento());
+            stmt.setString(3, locadora.getCidade());
             stmt.executeUpdate();
 
             stmt.close();
@@ -128,7 +129,6 @@ public class LocadoraDAO extends GeralDAO {
     }
 
     public void updateLocadora(Locadora locadora) {
-      
         try {
             Connection conn = this.getConnection();
             String sqlQuery = "UPDATE Locadora SET cidade = ? WHERE CNPJ = ?;";

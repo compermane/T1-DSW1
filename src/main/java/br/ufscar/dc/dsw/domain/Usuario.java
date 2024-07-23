@@ -12,9 +12,11 @@ public class Usuario {
     public Usuario(int id) {
         this.id = id;
     }
-    public Usuario(String email, String password, String nome, boolean admin, boolean locadora) {
+    
+    public Usuario(String email, String documento, String password, String nome, boolean admin, boolean locadora) {
         super();
         this.email = email;
+        this.documento = documento;
         this.password = password;
         this.nome = nome;
         this.admin = admin;

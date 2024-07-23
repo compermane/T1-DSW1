@@ -1,3 +1,8 @@
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,7 +12,7 @@
 </head>
 <body>
     <h1>Cadastro de Locadora</h1>
-    <form action="CadastroLocadora" method="post">
+    <form action="${pageContext.request.contextPath}/signUp-locadora/insercao" method="post">
         <h1> POR FAVOR, INSIRA OS SEGUINTES DADOS:</h1>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br>

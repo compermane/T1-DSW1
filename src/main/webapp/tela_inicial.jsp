@@ -1,4 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,13 +14,14 @@
     <div class="container">
         <header>
             <h1>Sistema de Locação de Bicicletas</h1>
+            <h2>Bem vindo <%= request.getAttribute("nomeUsuario") %></h2>
         </header>
         <nav>
             <ul>
                 <li><a href="listar_locadoras.jsp">Ver Locadoras</a></li>
                 <li><a href="cadastro_cliente.jsp">Cadastro de Cliente</a></li>
                 <li><a href="cadastro_locadora.jsp">Cadastro de Locadora</a></li>
-                <li><a href="login.jsp">Login</a></li>
+                <li><a href="${pageContext.request.contextPath}/indexController">Login</a></li>
             </ul>
         </nav>
         <main>
