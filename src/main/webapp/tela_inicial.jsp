@@ -18,10 +18,7 @@
         </header>
         <nav>
             <ul>
-                <li><a href="listar_locadoras.jsp">Ver Locadoras</a></li>
-                <li><a href="cadastro_cliente.jsp">Cadastro de Cliente</a></li>
-                <li><a href="cadastro_locadora.jsp">Cadastro de Locadora</a></li>
-                <li><a href="${pageContext.request.contextPath}/indexController">Login</a></li>
+                <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
             </ul>
         </nav>
         <main>

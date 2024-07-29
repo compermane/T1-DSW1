@@ -14,15 +14,15 @@
         <url-pattern>/signUp-locadora/*</url-pattern>
     </servlet-mapping>
 
-    <servlet>
+    <!-- <servlet>
     <servlet-name>Index</servlet-name>
     <servlet-class>br.ufscar.dc.dsw.controllers.IndexController</servlet-class>
     </servlet>
-    
+
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
-        <url-pattern>/indexController/*</url-pattern>
-    </servlet-mapping>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping> -->
 
     <servlet>
         <servlet-name>HomeController</servlet-name>
@@ -33,5 +33,4 @@
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/tela_inicial/*</url-pattern>
     </servlet-mapping>
-
 </web-app>
