@@ -22,19 +22,16 @@ public class LoginController extends HttpServlet {
 
 		switch (action) {
 			case "/login":
-                System.out.println("Deu certo");
 				handleLogin(request, response);
 				break;
 			
 			default:
-				System.out.println("TÁ VINDO PRA CA");
 				doGet(request, response);
 				break;
 		}
     }
 
 	private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Deu cerot 2");
 		Erro erros = new Erro();
 
 		String email = request.getParameter("email");

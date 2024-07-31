@@ -31,10 +31,10 @@
             </div>
         </form>
 
-        <!-- Locadoras -->
         <h2 id = "listaLocadorasTitulo">Lista de Locadoras</h2>
         <select name = "selectCidade" id = "selectCidade">
             <option value = "vazio" selected style = "background-color: gray;">Selecionar cidade</option>
+            <!-- TODO: Adicionar cidades do banco como seleção -->
         </select>
         <div id = "locadorasTableContainer">
             <table id="locadorasTable">
@@ -42,7 +42,6 @@
                     <th>Nome</th>
                     <th>Cidade</th>
                 </tr>
-                <!-- Popule a tabela com todas as locadoras inicialmente -->
                 <c:forEach var="locadora" items="${sessionScope.listaLocadoras}">
                     <tr>
                         <td>${locadora.nome}</td>

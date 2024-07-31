@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.ufscar.dc.dsw.domain.Locadora;
-import br.ufscar.dc.dsw.domain.Locacao;
 import br.ufscar.dc.dsw.dao.LocadoraDAO;
-import br.ufscar.dc.dsw.dao.LocacaoDAO;
 import br.ufscar.dc.dsw.errors.Erro;
 
 @WebServlet(name = "Index", urlPatterns = { "/index.jsp" })
@@ -27,6 +25,9 @@ public class IndexController extends HttpServlet {
 	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("[+] Método get de indexController executado");
+		
+		request.getSession().invalidate();
+		
 		getLocadoras(request, response);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
@@ -37,11 +38,8 @@ public class IndexController extends HttpServlet {
 		Erro erros = new Erro();
 
 		List<Locadora> listaLocadoras = new LocadoraDAO().getAll();
-
     	request.getSession().setAttribute("listaLocadoras", listaLocadoras);
-		List<Locacao> listaLocacoes = new LocacaoDAO().getAll();
 
-        request.getSession().setAttribute("listaLocacoes", listaLocacoes);
 		request.setAttribute("mensagens", erros);
 	}
 }

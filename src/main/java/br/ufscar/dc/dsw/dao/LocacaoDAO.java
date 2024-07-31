@@ -2,7 +2,7 @@ package br.ufscar.dc.dsw.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
+// import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -11,17 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufscar.dc.dsw.domain.Locacao;
+import br.ufscar.dc.dsw.domain.Locadora;
 
 public class LocacaoDAO extends GeralDAO{
 
-     public List<Locacao> getAll() {
+     public List<Locacao> getAll(int userID) {
         List<Locacao> listaLocacoes = new ArrayList<>();
-        String sqlQuery = "SELECT * FROM Locacao;";
+        String sqlQuery = "SELECT l.*, usr.nome AS nome, usr.id AS usuario_id, lo.id_locadora AS locadora_id, lo.cidade AS cidade FROM Locacao l" 
+                        + " JOIN Locadora lo ON l.CNPJ = lo.CNPJ"
+                        + " JOIN Usuario usr ON lo.id_locadora = usr.id WHERE usr.id = ?;";
 
         try {
             Connection conn = this.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery(sqlQuery);
+            PreparedStatement stmt = conn.prepareStatement(sqlQuery);
+
+            stmt.setInt(1, userID);
+
+            ResultSet resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
                 String CPF = resultSet.getString("CPF");
@@ -29,6 +35,9 @@ public class LocacaoDAO extends GeralDAO{
                 Date dia = resultSet.getDate("dia");
                 Time horario = resultSet.getTime("horario");
                 Locacao locacao = new Locacao(new ClienteDAO().getClienteByCPF(CPF), new LocadoraDAO().getLocadoraByCNPJ(CNPJ), dia, horario);
+                Locadora locadora = new Locadora(resultSet.getInt("locadora_id"), CNPJ, resultSet.getString("cidade"), resultSet.getString("nome"));
+
+                locacao.setLocadora(locadora);
                 listaLocacoes.add(locacao); 
             }
 

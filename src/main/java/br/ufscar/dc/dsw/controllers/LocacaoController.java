@@ -1,11 +1,9 @@
 package br.ufscar.dc.dsw.controllers;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.util.Calendar;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,14 +11,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.ufscar.dc.dsw.dao.LocadoraDAO;
+// import br.ufscar.dc.dsw.dao.UsuarioDAO;
 import br.ufscar.dc.dsw.dao.ClienteDAO;
 import br.ufscar.dc.dsw.dao.LocacaoDAO;
 import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.domain.Usuario;
+import br.ufscar.dc.dsw.errors.Erro;
 import br.ufscar.dc.dsw.domain.Locacao;
 
 
-@WebServlet(urlPatterns = { "/locacoes/*" })
+@WebServlet(name = "LocacaoController", urlPatterns = { "/cadastrarLocacao", "/cadastrar-locacao/*" })
 public class LocacaoController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -35,80 +35,58 @@ public class LocacaoController extends HttpServlet {
         daoLocacao = new LocacaoDAO();
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        System.out.println("PASSEI POR: LocacaoController");
-        
-        java.sql.Date dataAtualSistema = new java.sql.Date(System.currentTimeMillis());
-
-		Calendar calendar = Calendar.getInstance();
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		LocalTime horaAtualSistema = LocalTime.of(hour, hour, hour);
-        Time sqlTime = Time.valueOf(horaAtualSistema);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String dataAtualSistemaString = dateFormat.format(dataAtualSistema);
-		request.setAttribute("horaAtualSistema", sqlTime);
-		request.setAttribute("dataAtualSistemaString", dataAtualSistemaString);
-        
-        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
-
-        if (usuario == null || usuario.getIsLocadora()) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/admin");
-            dispatcher.forward(request, response);
-            return;
-        }
-
+    @Override 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getPathInfo();
 
-        if (action == null) {
+        if(action == null) {
             action = "";
         }
 
-        try {
-            switch (action) {
-                case "/cadastro":
-                    apresentaFormCadastro(request, response);
-                    break;
-
-                case "/insercao":
-                    insere(request, response);
-                    break;
-
-                default:
-                    lista(request, response);
-                    break;
-            }
-        } catch (RuntimeException | IOException | ServletException e) {
-            throw new ServletException(e);
+        switch (action) {
+            case "/alugar":
+                alugar(request, response);
+                break;
+        
+            default:
+                break;
         }
     }
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método get de LocacaoController executado");
 
-    private void lista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("listaLocacoes", daoLocacao.getAll());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/logado/usuario/index.jsp");
+        getLocadoras(request, response);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/locacao_bicicleta.jsp");
         dispatcher.forward(request, response);
     }
 
+    public void getLocacoes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método getLocadoras de LocacaoController executado");
+		Erro erros = new Erro();
 
-    private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("listaLocadoras", new LocadoraDAO().getAll());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/locacao/formulario.jsp");
-        dispatcher.forward(request, response);
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
+		List<Locacao> listaLocacoes = new LocacaoDAO().getAll(usuario.getId());
+    	request.getSession().setAttribute("listaLocacoes", listaLocacoes);
+
+		request.setAttribute("mensagens", erros);
     }
 
-    private void insere(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void getLocadoras(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método getLocadoras de LocacaoController executado");
+		Erro erros = new Erro();
+
+		List<Locadora> listaLocadoras = new LocadoraDAO().getAll();
+    	request.getSession().setAttribute("listaLocadoras", listaLocadoras);
+
+		request.setAttribute("mensagens", erros);
+    }
+
+    public void alugar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
         try {
-
             SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date data_sem_formatar = reFormat.parse(request.getParameter("dataLocacao"));
             java.sql.Date dataLocacao = new java.sql.Date(data_sem_formatar.getTime());
@@ -118,21 +96,25 @@ public class LocacaoController extends HttpServlet {
             java.util.Date horario_sem_formatar = timeFormat.parse(horarioString);
             java.sql.Time horario = new java.sql.Time(horario_sem_formatar.getTime());
             
-            Locadora locadora = daoLocadora.getLocadoraByID(Integer.parseInt(request.getParameter("locadoraId")));
+            Locadora locadora = daoLocadora.getLocadoraByCNPJ(request.getParameter("locadoraSelect"));
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
-            Locacao locacao = new Locacao(daoCliente.getClienteByID(usuario.getId()), locadora,
-                    dataLocacao, horario);
+            Locacao locacao = new Locacao(daoCliente.getClienteByID(usuario.getId()), locadora, dataLocacao, horario);
             
-            if(!daoLocacao.existeLocacao(locadora.getCidade(), dataLocacao, horario)) {
+            if (!daoLocacao.existeLocacao(locadora.getCidade(), dataLocacao, horario)) {
                 daoLocacao.insertLocacao(locacao);
+
                 request.setAttribute("erroLocacao", "");
                 request.setAttribute("locadoraParaEmail", locadora);
+                request.setAttribute("diaLocacao", data_sem_formatar);
+                request.setAttribute("horarioLocacao", horarioString);
+
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/SendEmail");
                 dispatcher.forward(request, response);
             }
             else {
                 request.setAttribute("erroLocacao", "Horário indisponível");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/locacao/formulario.jsp");
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/locacao_bicicleta.jsp");
                 dispatcher.forward(request, response);
             }
             
@@ -141,4 +123,4 @@ public class LocacaoController extends HttpServlet {
             throw new ServletException(e);
         }
     }
-}
+    }
