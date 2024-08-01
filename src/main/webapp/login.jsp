@@ -51,34 +51,55 @@
             </table>
         </div>
     </div>
-<script src="scripts/listaLocadoras.js">
-function loadCidades() {
-    console.log("PASSEI POR BRUH2")
-    var cidadeSelect = document.getElementById('selectCidade');
-    var xhr = new XMLHttpRequest();
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+            loadCidades();
 
-    try {
-        xhr.open('GET', './cidades.txt', true);
+        var selectCidade = document.getElementById('selectCidade');
 
-        console.log("PASSEI POR BRUH 3")
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var cidades = xhr.responseText.split('\n');
+        selectCidade.addEventListener('change', function () {
+            var cidadeSelecionada = selectCidade.value;
+            var xhr = new XMLHttpRequest();
 
-                for (var i = 0; i < cidades.length; i++) {
-                    var option = document.createElement('option');
-                    option.text = cidades[i];
-                    cidadeSelect.add(option);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var locadorasTableContainer = document.getElementById('locadorasTableContainer');
+                    locadorasTableContainer.innerHTML = xhr.responseText;
                 }
-            }
-        };
+            };
 
-        xhr.send();
+            xhr.open('GET', 'filtrar_locadoras.jsp?cidadeSelecionada=' + cidadeSelecionada, true);
+            xhr.send();
+        });
+    });
+
+    function loadCidades() {
+        console.log("PASSEI POR BRUH2")
+        var cidadeSelect = document.getElementById('selectCidade');
+        var xhr = new XMLHttpRequest();
+
+        try {
+            xhr.open('GET', './cidades/cidades.txt', true);
+
+            console.log("PASSEI POR BRUH 3")
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var cidades = xhr.responseText.split('\n');
+
+                    for (var i = 0; i < cidades.length; i++) {
+                        var option = document.createElement('option');
+                        option.text = cidades[i];
+                        cidadeSelect.add(option);
+                    }
+                }
+            };
+
+            xhr.send();
+        }
+        catch (error) {
+            console.log("BRUH219")
+        }
     }
-    catch (error) {
-        console.log("BRUH219")
-    }
-}
 </script>
 </body>
 </html>

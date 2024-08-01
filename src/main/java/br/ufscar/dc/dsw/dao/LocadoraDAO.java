@@ -45,7 +45,7 @@ public class LocadoraDAO extends GeralDAO {
 
     public Locadora getLocadoraByCNPJ(String CNPJ) {
         Locadora locadora = null;
-        String sql = "SELECT * FROM Locadora WHERE CNPJ = ?;";
+        String sql = "SELECT * FROM Locadora lo WHERE CNPJ = ?;";
 
         try {
             Connection conn = this.getConnection();
@@ -56,14 +56,14 @@ public class LocadoraDAO extends GeralDAO {
 
             if (resultSet.next()) {
                 int id = resultSet.getInt("id_locadora");
-                String email = resultSet.getString("email");
-                String senha = resultSet.getString("senha");
-                String nome = resultSet.getString("nome");
-                boolean admin = resultSet.getBoolean("isAdmin");
-                boolean isLocadora = resultSet.getBoolean("isLocadora");
+                // String email = resultSet.getString("email");
+                // String senha = resultSet.getString("senha");
+                // String nome = resultSet.getString("nome");
+                // boolean admin = resultSet.getBoolean("isAdmin");
+                // boolean isLocadora = resultSet.getBoolean("isLocadora");
                 String cidade = resultSet.getString("cidade");
 
-                locadora = new Locadora(id, CNPJ, email, senha, nome, admin, isLocadora, cidade);
+                locadora = new Locadora(id, CNPJ, cidade);
             }
 
             resultSet.close();
@@ -131,10 +131,11 @@ public class LocadoraDAO extends GeralDAO {
     public void updateLocadora(Locadora locadora) {
         try {
             Connection conn = this.getConnection();
-            String sqlQuery = "UPDATE Locadora SET cidade = ? WHERE CNPJ = ?;";
+            String sqlQuery = "UPDATE Locadora SET cidade = ?, CNPJ = ? WHERE id_locadora = ?;";
             PreparedStatement stmt = conn.prepareStatement(sqlQuery);
             stmt.setString(1, locadora.getCidade());
             stmt.setString(2, locadora.getDocumento());
+            stmt.setInt(3, locadora.getId());
             stmt.executeUpdate();
             
             stmt.close();

@@ -15,6 +15,17 @@ public class Cliente extends Usuario {
         this.dataNascimento = dataNascimento;
     }
 
+    public Cliente(int id, String CPF, String telefone, String sexo, Date dataNascimento) {
+        super(id, CPF);
+        this.telefone = telefone;
+        this.sexo = sexo;
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Cliente(int id, String CPF) {
+        super(id, CPF);
+    }
+
     public String getTelefone() {
         return this.telefone;
     }
