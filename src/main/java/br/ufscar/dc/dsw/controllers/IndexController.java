@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.dao.LocadoraDAO;
-import br.ufscar.dc.dsw.errors.Erro;
 
 @WebServlet(name = "Index", urlPatterns = { "/index.jsp" })
 public class IndexController extends HttpServlet {
@@ -35,11 +34,7 @@ public class IndexController extends HttpServlet {
 	}
 
 	private void getLocadoras(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Erro erros = new Erro();
-
 		List<Locadora> listaLocadoras = new LocadoraDAO().getAll();
     	request.getSession().setAttribute("listaLocadoras", listaLocadoras);
-
-		request.setAttribute("mensagens", erros);
 	}
 }

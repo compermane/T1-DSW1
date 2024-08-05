@@ -12,6 +12,14 @@
 </head>
 
 <body>
+    <c:if test="${not empty errorMessage}">
+        <div class="erro">
+            <c:forEach var="erro" items="${errorMessage}">
+                <h3>${erro}</h3>
+            </c:forEach>
+        </div>
+    </c:if>
+
     <div class = "center-container">
         <div class = "form-container">
         <form class = "loginForm" method = "post" action = "/DSW1_T1/loginController/login">
@@ -75,17 +83,14 @@
     });
 
     function loadCidades() {
-        console.log("PASSEI POR BRUH2")
         var cidadeSelect = document.getElementById('selectCidade');
         var xhr = new XMLHttpRequest();
 
         try {
             xhr.open('GET', '${pageContext.request.contextPath}/cidades/cidades.txt', true);
 
-            console.log("PASSEI POR BRUH 3")
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log("PASSEI POR BRUH 5")
                     var cidades = xhr.responseText.split('\n');
 
                     for (var i = 0; i < cidades.length; i++) {
@@ -96,11 +101,10 @@
                 }
             };
 
-            console.log("PASSEI POR BRUH 6")
             xhr.send();
         }
         catch (error) {
-            console.log("BRUH219")
+            console.log(error)
         }
     }
 </script>

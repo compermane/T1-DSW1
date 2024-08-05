@@ -20,6 +20,7 @@ public class HomeController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método get de HomeController executado");
         // Recuperar o usuário da sessão
         HttpSession session = request.getSession();
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
@@ -27,7 +28,6 @@ public class HomeController extends HttpServlet {
         if (usuario != null) {
             // Definir o nome do usuário como atributo da requisição
             request.setAttribute("nomeUsuario", usuario.getNome());
-
             List<Locacao> listaLocacoes = new LocacaoDAO().getAll(usuario.getId());
             request.getSession().setAttribute("listaLocacoes", listaLocacoes);
 

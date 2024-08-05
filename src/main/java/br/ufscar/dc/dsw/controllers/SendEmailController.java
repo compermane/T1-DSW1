@@ -9,7 +9,11 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.util.Date;
+import java.util.List;
+
+import br.ufscar.dc.dsw.domain.Locacao;
 import br.ufscar.dc.dsw.domain.Usuario;
+import br.ufscar.dc.dsw.dao.LocacaoDAO;
 import br.ufscar.dc.dsw.domain.Locadora;
 
 @WebServlet(urlPatterns = { "/SendEmail" })
@@ -68,7 +72,11 @@ public class SendEmailController extends HttpServlet {
         
         System.out.println("[+] Email enviado para " + toEmails);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/locacao_bicicleta.jsp");
+        LocacaoDAO locacaoDAO = new LocacaoDAO();
+        List<Locacao> listaLocacoes = locacaoDAO.getAll(usuario.getId());
+        request.getSession().setAttribute("listaLocacoes", listaLocacoes);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/home/cliente/tela_inicial.jsp");
         dispatcher.forward(request, response);
     }
 }

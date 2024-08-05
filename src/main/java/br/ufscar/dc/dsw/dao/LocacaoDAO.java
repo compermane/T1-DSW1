@@ -19,7 +19,8 @@ public class LocacaoDAO extends GeralDAO{
         List<Locacao> listaLocacoes = new ArrayList<>();
         String sqlQuery = "SELECT l.*, usr.nome AS nome, usr.id AS usuario_id, lo.id_locadora AS locadora_id, lo.cidade AS cidade FROM Locacao l" 
                         + " JOIN Locadora lo ON l.CNPJ = lo.CNPJ"
-                        + " JOIN Usuario usr ON lo.id_locadora = usr.id WHERE usr.id = ?;";
+                        + " JOIN Cliente cl ON l.CPF = cl.CPF"
+                        + " JOIN Usuario usr ON lo.id_locadora = usr.id WHERE cl.id_usuario = ?;";
 
         try {
             Connection conn = this.getConnection();

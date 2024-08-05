@@ -6,9 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.ufscar.dc.dsw.dao.UsuarioDAO;
 import br.ufscar.dc.dsw.domain.Usuario;
-import br.ufscar.dc.dsw.errors.Erro;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
@@ -32,8 +33,6 @@ public class LoginController extends HttpServlet {
     }
 
 	private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Erro erros = new Erro();
-
 		String email = request.getParameter("email");
 		String senha = request.getParameter("senha");
 
@@ -49,11 +48,13 @@ public class LoginController extends HttpServlet {
 				return;
 			} 
 			else {
-				erros.add("senha_invalida");
+				request.setAttribute("errorMessage", "usuario_ou_senha_invalidos");
 			}
 		} 
 		else {
-			erros.add("usuario_nao_encontrado");
+			request.setAttribute("errorMessage", "usuario_nao_reconhecido");
 		}
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        dispatcher.forward(request, response);
 	}
 }

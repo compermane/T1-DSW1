@@ -19,12 +19,11 @@
         <nav>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
-                <li><a href="${pageContext.request.contextPath}/cadastrarLocacao">Cadastrar locação</a></li>
+                <li><a href="${pageContext.request.contextPath}/cadastrar-locacao/">Cadastrar locação</a></li>
             </ul>
         </nav>
         <main>
             <h2>Bem-vindo ao Sistema de Locação de Bicicletas</h2>
-            <h3><%= request.getAttribute("listaLocacoes") %></h3>
             <p>Utilize os links acima para navegar pelas funcionalidades do sistema.</p>
             <div id = "locacoesTableContainer">
                 <table id="locacoesTable">
@@ -34,7 +33,6 @@
                         <th>Dia</th>
                         <th>Horário</th>
                     </tr>
-
                     <c:forEach var="locacao" items="${sessionScope.listaLocacoes}">
                         <tr>
                             <td>${locacao.locadora.nome}</td>

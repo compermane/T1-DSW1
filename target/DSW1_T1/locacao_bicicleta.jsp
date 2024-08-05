@@ -13,6 +13,11 @@
 <body>
     <h1>Locação de Bicicleta</h1>
 
+    <c:if test="${not empty erroLocacao}">
+        <c:forEach var="erro" items="${erroLocacao}">
+            <h3>${erro}</h3>
+        </c:forEach>
+    </c:if>
     <c:set var="listaLocadoras" value="${sessionScope.listaLocadoras}" />
     <c:if test="${not empty listaLocadoras}">
         <form action="${pageContext.request.contextPath}/cadastrar-locacao/alugar" method="post">

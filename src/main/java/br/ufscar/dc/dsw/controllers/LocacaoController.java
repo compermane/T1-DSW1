@@ -16,11 +16,10 @@ import br.ufscar.dc.dsw.dao.ClienteDAO;
 import br.ufscar.dc.dsw.dao.LocacaoDAO;
 import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.domain.Usuario;
-import br.ufscar.dc.dsw.errors.Erro;
 import br.ufscar.dc.dsw.domain.Locacao;
 
 
-@WebServlet(name = "LocacaoController", urlPatterns = { "/cadastrarLocacao", "/cadastrar-locacao/*" })
+@WebServlet(name = "LocacaoController", urlPatterns = { "/cadastrar-locacao/*" })
 public class LocacaoController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +48,7 @@ public class LocacaoController extends HttpServlet {
                 break;
         
             default:
+                doGet(request, response);
                 break;
         }
     }
@@ -57,6 +57,7 @@ public class LocacaoController extends HttpServlet {
         System.out.println("[+] Método get de LocacaoController executado");
 
         getLocadoras(request, response);
+        getLocacoes(request, response);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/locacao_bicicleta.jsp");
         dispatcher.forward(request, response);
@@ -64,23 +65,17 @@ public class LocacaoController extends HttpServlet {
 
     public void getLocacoes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("[+] Método getLocadoras de LocacaoController executado");
-		Erro erros = new Erro();
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
 		List<Locacao> listaLocacoes = new LocacaoDAO().getAll(usuario.getId());
     	request.getSession().setAttribute("listaLocacoes", listaLocacoes);
-
-		request.setAttribute("mensagens", erros);
     }
 
     public void getLocadoras(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("[+] Método getLocadoras de LocacaoController executado");
-		Erro erros = new Erro();
 
 		List<Locadora> listaLocadoras = new LocadoraDAO().getAll();
     	request.getSession().setAttribute("listaLocadoras", listaLocadoras);
-
-		request.setAttribute("mensagens", erros);
     }
 
     public void alugar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
