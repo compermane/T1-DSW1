@@ -15,8 +15,7 @@ public class ClienteDAO extends GeralDAO {
     public List<Cliente> getAll() {
         List<Cliente> listaClientes = new ArrayList<>();
 
-        // SELECT l.id_locadora, u.nome, u.senha, u.email, l.CNPJ, l.cidade,  u.isAdmin, u.isLocadora FROM Locadora l JOIN Usuario u ON l.id_locadora = u.id;";
-        String sqlQuery = "SELECT c.id_cliente, u.nome, u.senha, u.email, c.CPF, c.sexo, c.telefone, c.data_nascimento, u.isAdmin, u.isLocadora FROM Cliente c JOIN Usuario u ON c.id_cliente = u.id;";
+        String sqlQuery = "SELECT c.id_usuario, u.nome, u.senha, u.email, c.CPF, c.sexo, c.telefone, c.data_nascimento, u.isAdmin, u.isLocadora FROM Cliente c JOIN Usuario u ON c.id_usuario = u.id;";
 
         try {
             Connection conn = this.getConnection();
@@ -49,7 +48,8 @@ public class ClienteDAO extends GeralDAO {
 
     public Cliente getClienteByID(int id) {
         Cliente cliente = null;
-        String sqlQuery = "SELECT * FROM Cliente WHERE id_cliente = ?;";
+        String sqlQuery = "SELECT c.*, usr.email AS email, usr.senha AS senha, usr.nome AS nome, usr.isAdmin AS isAdmin, usr.isLocadora AS isLocadora"
+                          + " FROM Cliente c JOIN Usuario usr ON c.id_usuario = usr.id WHERE id_usuario = ?;";
 
         try {
             Connection conn = this.getConnection();
@@ -95,16 +95,16 @@ public class ClienteDAO extends GeralDAO {
 
             if (resultSet.next()) {
                 int id = resultSet.getInt("id_usuario");
-                String email = resultSet.getString("email");
-                String senha = resultSet.getString("senha");
-                String nome = resultSet.getString("nome");
-                boolean admin = resultSet.getBoolean("isAdmin");
-                boolean isLocadora = resultSet.getBoolean("isLocadora");
+                // String email = resultSet.getString("email");
+                // String senha = resultSet.getString("senha");
+                // String nome = resultSet.getString("nome");
+                // boolean admin = resultSet.getBoolean("isAdmin");
+                // boolean isLocadora = resultSet.getBoolean("isLocadora");
                 String sexo = resultSet.getString("sexo");
                 String telefone = resultSet.getString("telefone");
                 Date dataNascimento = resultSet.getDate("data_nascimento");
 
-                cliente = new Cliente(id, CPF, email, senha, nome, admin, isLocadora, telefone, sexo, dataNascimento);
+                cliente = new Cliente(id, CPF, telefone, sexo, dataNascimento);
             }
 
             resultSet.close();
@@ -144,12 +144,13 @@ public class ClienteDAO extends GeralDAO {
       
         try {
             Connection conn = this.getConnection();
-            String sqlQuery = "UPDATE Cliente SET sexo = ?, telefone = ?, data_nascimento = ? WHERE CPF = ?;";
+            String sqlQuery = "UPDATE Cliente SET sexo = ?, telefone = ?, data_nascimento = ?, CPF = ? WHERE id_usuario = ?;";
             PreparedStatement stmt = conn.prepareStatement(sqlQuery);
             stmt.setString(1, cliente.getSexo());
             stmt.setString(2, cliente.getTelefone());
             stmt.setDate(3, cliente.getDataNascimento());
             stmt.setString(4, cliente.getDocumento());
+            stmt.setInt(5, cliente.getId());
             stmt.executeUpdate();
             
             stmt.close();
@@ -161,7 +162,7 @@ public class ClienteDAO extends GeralDAO {
     }
 
     public void deleteCliente(Cliente cliente) {
-        String sqlQuery = "DELETE FROM Cliente WHERE CNPJ = ?;";
+        String sqlQuery = "DELETE FROM Cliente WHERE CPF = ?;";
 
         try {
             Connection conn = this.getConnection();

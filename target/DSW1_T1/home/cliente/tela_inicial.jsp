@@ -19,11 +19,32 @@
         <nav>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
+                <li><a href="${pageContext.request.contextPath}/cadastrarLocacao">Cadastrar locação</a></li>
             </ul>
         </nav>
         <main>
             <h2>Bem-vindo ao Sistema de Locação de Bicicletas</h2>
+            <h3><%= request.getAttribute("listaLocacoes") %></h3>
             <p>Utilize os links acima para navegar pelas funcionalidades do sistema.</p>
+            <div id = "locacoesTableContainer">
+                <table id="locacoesTable">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cidade</th>
+                        <th>Dia</th>
+                        <th>Horário</th>
+                    </tr>
+
+                    <c:forEach var="locacao" items="${sessionScope.listaLocacoes}">
+                        <tr>
+                            <td>${locacao.locadora.nome}</td>
+                            <td>${locacao.locadora.cidade}</td>
+                            <td>${locacao.dia}</td>
+                            <td>${locacao.horario}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
         </main>
         <footer>
             <p>&copy; 2024 Sistema de Locação de Bicicletas</p>

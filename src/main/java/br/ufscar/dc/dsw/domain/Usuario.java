@@ -34,6 +34,19 @@ public class Usuario {
         this.locadora = locadora;
     }
 
+    public Usuario(int id, String documento, String nome) {
+        super();
+        this.id = id;
+        this.documento = documento;
+        this.nome = nome;
+    }
+
+    public Usuario(int id, String documento) {
+        super();
+        this.id = id;
+        this.documento = documento;
+    }
+
     public int getId() {
         return this.id;
     }

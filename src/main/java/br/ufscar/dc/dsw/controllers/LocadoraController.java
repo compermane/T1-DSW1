@@ -27,201 +27,156 @@ public class LocadoraController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
+        System.out.println("[+] Método doPost de LocadoraController executado");
+        String action = request.getParameter("crudSelectAction");
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
+        switch (action) {
+            case "create":
+                handleCreateLocadora(request, response);
+                break;
+            
+            case "update":
+                handleUpdateLocadora(request, response);
+                break;
 
-        if(usuario == null || !usuario.getAdmin()) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/admin");
-            dispatcher.forward(request, response);
-            return;
-        }
-
-        String action = request.getPathInfo();
-
-        if(action == null) {
-            action = "";
-        }
-
-        try {
-            switch (action) {
-                case "/cadastro":
-                    apresentaFormCadastro(request, response);
-                    break;
-                case "/insercao":
-                    insere(request, response);
-                    break;
-                case "/remocao":
-                    remove(request, response);
-                    break;
-                case "/edicao":
-                    apresentaFormEdicao(request, response);
-                    break;
-                case "/atualizacao":
-                    atualize(request, response);
-                    break;
-                default:
-                    lista(request, response);
-                    break;
-            }
-        } 
-        catch (RuntimeException | IOException | ServletException e) {
-
-            throw new ServletException(e);
+            case "delete":
+                handleDeleteLocadora(request, response);
+                break;
+            default:
+                break;
         }
     }
 
-    private void lista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("listaLocadoras", daoLocadora.getAll());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/locadora/lista.jsp");
-        dispatcher.forward(request, response);
-    }
+    private void handleCreateLocadora(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método handleCreateCliente de ClienteController executado");
+		
+		String nome = request.getParameter("nomeCrud");
+		String email = request.getParameter("emailCrud");
+		String senha = request.getParameter("senhaCrud");
+		String cnpj = request.getParameter("documentoCrud");
+		String cidade = request.getParameter("cidadeCrud");
 
+		boolean isAdmin = false;
+		String isAdminStr = request.getParameter("isAdminCrud");
 
-    private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("listaLocadoras", new LocadoraDAO().getAll());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/locadora/formulario.jsp");
-        dispatcher.forward(request, response);
-    }
+		if(isAdminStr.equals("true")) {
+			isAdmin = true;
+		}
 
-    private void apresentaFormEdicao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Locadora locadora = daoLocadora.getLocadoraByID(id);
-
-        request.getSession().setAttribute("locadoraSelecionadaCRUD", locadora);
-        request.setAttribute("locadora", locadora);
-        request.getSession().setAttribute("listaLocadoras",  new LocadoraDAO().getAll());
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/locadora/formulario.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    private void insere(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-
-        try {
-            String email = request.getParameter("email");
-
-            // Verificar se o email já existe
+		try {
             if (daoUsuario.getUserByEmail(email) != null) {
                 String mensagemErro = "O email já está em uso.";
                 request.setAttribute("mensagemErro", mensagemErro);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/locadora/formulario.jsp");
+                System.out.println("PASSOU A1UI 1");
+                RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/admin/clientes");
                 dispatcher.forward(request, response);
                 return;
             }
 
-            String cnpj = request.getParameter("cnpj");
-            // Verificar se o CPF já existe
+            // Verificar se o CNPJ já existe
             if (daoLocadora.getLocadoraByCNPJ(cnpj) != null) {
                 String mensagemErro = "O CNPJ já está em uso.";
                 request.setAttribute("mensagemErro", mensagemErro);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/locadora/formulario.jsp");
+                System.out.println("PASSOU A1UI 2");
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/admin/clientes");
                 dispatcher.forward(request, response);
+
                 return;
             }
 
-            String senha = request.getParameter("senha");
-            String nome = request.getParameter("nome");
-
-            boolean admin;
-            String administrador = request.getParameter("administrador");
-
-            if (administrador == null || administrador == "0") {
-                admin = false;
-            } 
-            else {
-                admin = true;
-            }
-
-            Usuario usuario = new Usuario(email, cnpj, senha, nome, admin, true);
+			Usuario usuario = new Usuario(email, cnpj, senha, nome, isAdmin, true);
             daoUsuario.insertUser(usuario);
-
             usuario = daoUsuario.getUserByEmail(email);
-            String cidade = request.getParameter("cidade");
-            Locadora locadora = new Locadora(usuario.getId(), cnpj, email, senha, nome, admin, true, cidade);
+
+            Locadora locadora = new Locadora(usuario.getId(), cnpj, email, senha, nome, isAdmin, true, cidade);
             daoLocadora.insertLocadora(locadora);
-            response.sendRedirect("lista");
-        } catch (RuntimeException | IOException e) {
+
+            System.out.println("\nLocadora inserido com sucesso.\n");
+            
+            response.sendRedirect(request.getContextPath() + "/admin/locadoras");
+		}
+		catch(RuntimeException | IOException e) {
             throw new ServletException(e);
-        }
+		}
     }
 
-    private void atualize(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    private void handleUpdateLocadora(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método handleUpdateLocadora de LocadoraController executado");
         request.setCharacterEncoding("UTF-8");
-
+		
+		if(request.getParameter("crudSelectId") == "") {
+			request.setAttribute("mensagemErro", "Selecione um ID de locadora");
+			return;
+		}
+		
+		int idLocadora = Integer.parseInt(request.getParameter("crudSelectId"));
         try {
-            String cnpj = request.getParameter("cnpj");
-            String email = request.getParameter("email");
-            Locadora locadoraSelecionada = (Locadora) request.getSession().getAttribute("locadoraSelecionadaCRUD");
+            String cnpj = request.getParameter("documentoCrud");
+            String email = request.getParameter("emailCrud");
+
+			Locadora locadoraSelecionada = daoLocadora.getLocadoraByID(idLocadora);
 
             if(locadoraSelecionada != null) {
-                Usuario usuarioSelecionado = daoUsuario.getUserByID(locadoraSelecionada.getId());
-
-                if(usuarioSelecionado != null) {
-                    // Verificar se o email já existe
-                    if(daoUsuario.getUserByEmail(email) != null && !daoUsuario.getUserByEmail(email).getEmail().equals(usuarioSelecionado.getEmail())) {
-                        String mensagemErro = "O email já está em uso.";
-                        request.setAttribute("mensagemErro", mensagemErro);
-                        apresentaFormEdicao(request, response);
-                    }
-                    // Verificar se o CNPJ já existe
-                    if(daoLocadora.getLocadoraByCNPJ(cnpj) != null && !daoLocadora.getLocadoraByCNPJ(cnpj).getDocumento().equals(locadoraSelecionada.getDocumento())) {
-                        String mensagemErro = "O CNPJ já está em uso.";
-                        request.setAttribute("mensagemErro", mensagemErro);
-                        apresentaFormEdicao(request, response);
-                    }
+                // Verificar se o email já existe
+                if(daoUsuario.getUserByEmail(email) != null && !daoUsuario.getUserByEmail(email).getEmail().equals(locadoraSelecionada.getEmail())) {
+                    String mensagemErro = "O email já está em uso.";
+                    request.setAttribute("mensagemErro", mensagemErro);
                 }
-                
+                // Verificar se o CNPJ já existe
+                if(daoLocadora.getLocadoraByCNPJ(cnpj) != null && !daoLocadora.getLocadoraByCNPJ(cnpj).getDocumento().equals(locadoraSelecionada.getDocumento())) {
+                    String mensagemErro = "O CPF já está em uso.";
+                    request.setAttribute("mensagemErro", mensagemErro);
+                }             
             }
-            
 
-            String senha = request.getParameter("senha");
-            String nome = request.getParameter("nome");
-
-            String administrador = request.getParameter("administrador");
+            String senha = request.getParameter("senhaCrud");
+            String nome = request.getParameter("nomeCrud");
+            String cidade = request.getParameter("cidadeCrud");
+            String administrador = request.getParameter("isAdminCrud");
             boolean admin = false;
 
-            if (administrador == null || administrador == "0") {
+            if (administrador == null || administrador == "false") {
                 admin = false;
             }
-            else if(administrador == "1") {
+            else if(administrador == "true") {
                 admin = true;
             }
 
-            Usuario usuario = daoUsuario.getUserByID(Integer.parseInt(request.getParameter("id")));
+			if(email != "") {
+            	locadoraSelecionada.setEmail(email);
+			}
+			if(senha != "") {
+            	locadoraSelecionada.setSenha(senha);
+			}
+			if(nome != "") {
+            	locadoraSelecionada.setNome(nome);
+			}
+			if(cnpj != "") {
+				locadoraSelecionada.setDocumento(cnpj);
+			}
+			if(cidade != "") {
+				locadoraSelecionada.setCidade(cidade);
+			}
 
-            usuario.setEmail(email);
-            usuario.setSenha(senha);
-            usuario.setNome(nome);
-            usuario.setAdmin(admin);
-            daoUsuario.updateUser(usuario);
+            locadoraSelecionada.setAdmin(admin);
+            daoUsuario.updateUser(locadoraSelecionada);
+            daoLocadora.updateLocadora(locadoraSelecionada);
 
-            String cidade = request.getParameter("cidade");
-            Locadora locadora = daoLocadora.getLocadoraByID(usuario.getId());
-
-            locadora.setDocumento(cnpj);
-            locadora.setCidade(cidade);
-
-            daoLocadora.updateLocadora(locadora);
-            response.sendRedirect("lista");
+            response.sendRedirect(request.getContextPath() + "/admin/locadoras");
         } catch (RuntimeException | IOException e) {
             throw new ServletException(e);
         }
     }
+    private void handleDeleteLocadora(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método handleDeleteLocadora de LocadoraController executado");
+		if(request.getParameter("crudSelectId") == "") {
+			String mensagemErro = "Selecione um id de locadora.";
+			request.setAttribute("mensagemErro", mensagemErro);
+		}
+		int idLocadora = Integer.parseInt(request.getParameter("crudSelectId"));
+		daoUsuario.deleteUser(daoLocadora.getLocadoraByID(idLocadora));
 
-    private void remove(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            Usuario usuario = daoUsuario.getUserByID(Integer.parseInt(request.getParameter("id")));
-            daoUsuario.deleteUser(usuario);
-            response.sendRedirect("lista");
-        } catch (RuntimeException | IOException e) {
-            throw new ServletException(e);
-        }
+		response.sendRedirect("/clientes.jsp");
     }
 }

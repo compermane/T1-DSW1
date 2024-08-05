@@ -80,7 +80,7 @@ public class UsuarioDAO extends GeralDAO {
 
     public Usuario getUserByID(int id) {
         Usuario user = null;
-        String sqlQuery = "SELECT * FROM Usuario WHERE id_usuario = ?;";
+        String sqlQuery = "SELECT * FROM Usuario WHERE id = ?;";
 
         try {
             Connection conn = this.getConnection();
@@ -186,21 +186,22 @@ public class UsuarioDAO extends GeralDAO {
     }
  
     public void updateUser(Usuario user) {
-        String sqlQuery = "UPDATE Usuario SET email = ?, senha = ?, nome = ?, isAdmin = ?, isLocadora = ? WHERE documento = ?;";
+        String sqlQuery = "UPDATE Usuario SET email = ?, senha = ?, nome = ?, isAdmin = ?, isLocadora = ?, documento = ? WHERE id = ?;";
 
         try {
             Connection conn = this.getConnection();
-            PreparedStatement statement = conn.prepareStatement(sqlQuery);
+            PreparedStatement stmt = conn.prepareStatement(sqlQuery);
 
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getPassword());
-            statement.setString(3, user.getNome());
-            statement.setBoolean(4, user.getAdmin());
-            statement.setBoolean(5, user.getIsLocadora());
-            statement.setString(6, user.getDocumento());
+            stmt.setString(1, user.getEmail());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getNome());
+            stmt.setBoolean(4, user.getAdmin());
+            stmt.setBoolean(5, user.getIsLocadora());
+            stmt.setString(6, user.getDocumento());
+            stmt.setInt(7, user.getId());
 
-            statement.executeUpdate();
-            statement.close();
+            stmt.executeUpdate();
+            stmt.close();
 
             conn.close();
         } 
