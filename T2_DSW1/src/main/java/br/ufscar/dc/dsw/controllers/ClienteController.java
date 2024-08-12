@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.ufscar.dc.dsw.services.spec.ILocadoraService;
-import br.ufscar.dc.dsw.domain.Locadora;
+import br.ufscar.dc.dsw.services.spec.IClienteService;
+import br.ufscar.dc.dsw.domain.Cliente;
 import jakarta.validation.Valid;
 
 @Controller
@@ -20,27 +20,28 @@ public class ClienteController {
 
     // Instancia uma rota GET para o endereço "/"
     @GetMapping("/signUp-cliente")
-    public String index(Locadora locadora) {
+    public String index(Cliente cliente) {
         return "clientes/signUp-cliente";
     }
 
     @PostMapping("/salvar")
     public String cadastrarCliente(@Valid Cliente cliente, BindingResult result, RedirectAttributes attr) {
+        System.out.println("[+] Método cadastrarCliente executado");
         try {
-            locadora.setRole("ROLE_LOCADORA");
-            locadoraService.salvar(locadora);
+            cliente.setRole("ROLE_CLIENTE");
+            clienteService.salvar(cliente);
         }
         catch(Exception e) {
-            System.out.println("[-] Erro ao cadastrar locadora: " + e.getMessage());
+            System.out.println("[-] Erro ao cadastrar cliente: " + e.getMessage());
             e.printStackTrace();
         }
         
-        attr.addFlashAttribute("sucess", "locadora.create.sucess");
-        return "redirect:/locadoras/listar";
+        attr.addFlashAttribute("sucess", "cliente.create.sucess");
+        return "redirect:/home/";
     }
 
     @PostMapping("/editar")
-    public String editarLocadora(@Valid Locadora locadora, BindingResult result, RedirectAttributes attr) {
+    public String editarLocadora(@Valid Cliente cliente, BindingResult result, RedirectAttributes attr) {
         return "index";
     }
 

@@ -19,6 +19,6 @@ public interface IClienteDAO extends CrudRepository<Cliente, Long>{
 
 	void deleteById(Long id);
 
-	@Query("SELECT c FROM Cliente c WHERE c.CPF = :CPF")
-	public Cliente findByCPF(@Param("CPF") String CPF);
+	@Query("SELECT c FROM Cliente c WHERE c.cpf = :cpf")
+	public Cliente findByCPF(@Param("cpf") String cpf);
 }

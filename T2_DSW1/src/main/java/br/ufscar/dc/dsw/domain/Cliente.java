@@ -5,10 +5,9 @@ import java.sql.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 import br.ufscar.dc.dsw.validation.UniqueDocumento;
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
 @SuppressWarnings("serial")
 @Entity
@@ -18,31 +17,27 @@ public class Cliente extends Usuario {
         @NotBlank
         @UniqueDocumento(type = UniqueDocumento.DocumentoType.CPF, message = "CPF já cadastrado")
     @Column(nullable = false, unique = true, length = 11)
-    private String CPF;
+    private String cpf;
 
         @NotBlank
     @Column(nullable = false, unique = false, length = 11)
     private String telefone;
 
-        @NotBlank
+        @NotNull
     @Column(nullable = false, unique = false)
     private Date data_nascimento;
 
         @NotBlank
     @Column(nullable = false, unique = false, length = 1)
     private String sexo;
-    
-	@OneToOne
-	@JoinColumn(name = "id_usuario", nullable = false)
-	private Usuario usuario;
 
 	
-	public String getCPF() {
-		return CPF;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setCPF(String CPF) {
-		this.CPF = CPF;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getTelefone() {
@@ -73,7 +68,7 @@ public class Cliente extends Usuario {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("CPF: " + CPF + ", ");
+		sb.append("CPF: " + cpf + ", ");
 		sb.append("Telefone: " + telefone + ", ");
 		sb.append("Data de nascimento: " + data_nascimento.toString() + ", ");
         sb.append("Sexo: " + sexo + ", ");
