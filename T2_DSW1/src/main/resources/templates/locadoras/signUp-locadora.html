@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	    xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Locadora</title>
+    <link rel="stylesheet" href="teste.css">
+</head>
+<body>
+    <h1>Cadastro de Locadora</h1>
+    <form 
+        th:action="@{/locadoras/salvar}" 
+        th:object="${locadora}" method="post">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label th:text="#{locadora.nome.label}" for="nome"></label> 
+                <input type="text" class="form-control" id="nome" autofocus="autofocus"
+                    th:field="*{nome}" th:placeholder="#{locadora.nome.label}"
+                    th:classappend="${#fields.hasErrors('nome')} ? is-invalid" />
+
+                <div class="invalid-feedback">
+                    <span th:errors="*{nome}"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label th:text="#{locadora.cnpj.label}" for="cnpj"></label> 
+                <input type="text" class="form-control" id="cnpj" autofocus="autofocus"
+                    th:field="*{cnpj}" placeholder="__.___.___/____-__"
+                    th:readonly="${locadora.id != null}"
+                    data-mask="00.000.000/0000-00" data-mask-reverse="true"
+                    th:classappend="${#fields.hasErrors('cnpj')} ? is-invalid" />
+                    
+                <div class="invalid-feedback">
+                    <span th:errors="*{cnpj}"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label th:text="#{locadora.cidade.label}" for="cidade"></label> 
+                <input type="text" class="form-control" id="cidade" autofocus="autofocus"
+                    th:field="*{cidade}" th:placeholder="#{locadora.cidade.label}"
+                    th:classappend="${#fields.hasErrors('cidade')} ? is-invalid" />
+
+                <div class="invalid-feedback">
+                    <span th:errors="*{cidade}"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label th:text="#{usuario.email.label}" for="email"></label> 
+                <input type="email" class="form-control" id="email" autofocus="autofocus"
+                    th:field="*{email}" th:placeholder="#{usuario.email.label}"
+                    th:classappend="${#fields.hasErrors('email')} ? is-invalid" />
+
+                <div class="invalid-feedback">
+                    <span th:errors="*{email}"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label th:text="#{usuario.senha.label}" for="senha"></label> 
+                <input type="password" class="form-control" id="senha" autofocus="autofocus"
+                    th:field="*{senha}" th:placeholder="#{usuario.senha.label}"
+                    th:classappend="${#fields.hasErrors('senha')} ? is-invalid" />
+
+                <div class="invalid-feedback">
+                    <span th:errors="*{senha}"></span>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="role" th:field="*{role}" th:value="'ROLE_LOCADORA'" />
+        <input type="hidden" id="id" th:field="*{id}" />
+        <button type="submit" th:text="#{button.salvar.label}"
+            class="btn btn-primary btn-sm"></button>
+    </form>
+</body>
+</html>
