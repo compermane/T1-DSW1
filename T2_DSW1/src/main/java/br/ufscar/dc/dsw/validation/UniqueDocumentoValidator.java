@@ -8,13 +8,9 @@ import org.springframework.stereotype.Component;
 
 import br.ufscar.dc.dsw.dao.IClienteDAO;
 import br.ufscar.dc.dsw.dao.ILocadoraDAO;
-import br.ufscar.dc.dsw.dao.IUsuarioDAO;
 
 @Component
 public class UniqueDocumentoValidator implements ConstraintValidator<UniqueDocumento, String> {
-
-	@Autowired
-	private IUsuarioDAO usuarioDAO;
 
 	@Autowired
 	private ILocadoraDAO locadoraDAO;
@@ -36,12 +32,10 @@ public class UniqueDocumentoValidator implements ConstraintValidator<UniqueDocum
         }
 
         switch (type) {
-            case DOCUMENTO:
-                return usuarioDAO == null || usuarioDAO.findByDocumento(value) == null;
             case CPF:
                 return clienteDAO == null || clienteDAO.findByCPF(value) == null;
             case CNPJ:
-                return locadoraDAO == null || locadoraDAO.findByCNPJ(value) == null;
+                return locadoraDAO == null || locadoraDAO.findByCnpj(value) == null;
             default:
                 return true;
         }

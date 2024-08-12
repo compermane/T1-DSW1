@@ -13,7 +13,7 @@ import br.ufscar.dc.dsw.validation.UniqueDocumento;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "Cliente")
-public class Cliente extends AbstractEntity<Long> {
+public class Cliente extends Usuario {
 
         @NotBlank
         @UniqueDocumento(type = UniqueDocumento.DocumentoType.CPF, message = "CPF já cadastrado")

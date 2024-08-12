@@ -3,36 +3,30 @@ package br.ufscar.dc.dsw.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
 import br.ufscar.dc.dsw.validation.UniqueDocumento;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "Locadora")
-public class Locadora extends AbstractEntity<Long> {
+public class Locadora extends Usuario {
 
         @NotBlank
         @UniqueDocumento(type = UniqueDocumento.DocumentoType.CNPJ, message = "CNPJ já cadastrado")
-    @Column(nullable = false, unique = true, length = 14)
-    private String CNPJ;
+    @Column(name = "CNPJ", nullable = false, unique = true, length = 14)
+    private String cnpj;
 
         @NotBlank
     @Column(nullable = false, unique = false, length = 256)
     private String cidade;
-    
-	@OneToOne
-	@JoinColumn(name = "id_usuario", nullable = false)
-	private Usuario usuario;
 
 	
-	public String getCNPJ() {
-		return CNPJ;
+	public String getCnpj() {
+		return cnpj;
 	}
 
-	public void setCNPJ(String CNPJ) {
-		this.CNPJ = CNPJ;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 
 	public String getCidade() {
@@ -47,7 +41,7 @@ public class Locadora extends AbstractEntity<Long> {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("CNPJ: " + CNPJ + ", ");
+		sb.append("CNPJ: " + cnpj + ", ");
 		sb.append("Cidade: " + cidade);
 		sb.append("]");
 		return sb.toString(); 

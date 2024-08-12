@@ -2,21 +2,19 @@ package br.ufscar.dc.dsw.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import br.ufscar.dc.dsw.validation.UniqueDocumento;
+import jakarta.validation.constraints.NotNull;
 import br.ufscar.dc.dsw.validation.UniqueEmail;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "Usuario")
+
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario extends AbstractEntity<Long> {
-
-		@NotBlank
-		@UniqueDocumento(type = UniqueDocumento.DocumentoType.DOCUMENTO, message = "Documento já cadastrado")	
-	@Column(nullable = false, unique = true, length = 20)
-	private String documento;
-
 		@NotBlank
 		@UniqueEmail(message = "Email já cadastrado")
 	@Column(nullable = false, unique = true, length = 256)
@@ -30,21 +28,13 @@ public class Usuario extends AbstractEntity<Long> {
 	@Column(nullable = false, unique = false, length = 256)
 	private String nome;
 
-		@NotBlank
+		@NotNull
 	@Column(nullable = false, unique = false)
 	private boolean isAdmin;
 
 		@NotBlank
 	@Column(nullable = false, unique = false, length = 45)
 	private String role;
-	
-	public String getDocumento() {
-		return documento;
-	}
-
-	public void setDocumento(String documento) {
-		this.documento = documento;
-	}
 
 	public String getEmail() {
 		return email;
@@ -90,7 +80,6 @@ public class Usuario extends AbstractEntity<Long> {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("Documento: " + documento + ", ");
 		sb.append("Email: " + email + ", ");
 		sb.append("Nome: " + nome + ", ");
 		sb.append("Admin: " + ((isAdmin) ? "sim" : "não") + ", ");

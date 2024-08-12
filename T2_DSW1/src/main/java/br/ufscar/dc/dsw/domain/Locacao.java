@@ -16,15 +16,6 @@ import jakarta.validation.constraints.NotBlank;
 @Entity
 @Table(name = "Locacao")
 public class Locacao extends AbstractEntity<Long> {
-
-        @NotBlank
-    @Column(nullable = false, unique = true, length = 14)
-    private String CPF;
-
-        @NotBlank
-    @Column(nullable = false, unique = true, length = 14)
-    private String CNPJ;
-
         @NotBlank
     @Column(nullable = false, unique = false, length = 256)
     private Date dia;
@@ -41,22 +32,6 @@ public class Locacao extends AbstractEntity<Long> {
     @JoinColumn(name = "CNPJ", nullable = false, foreignKey = @ForeignKey(name = "FK_Locacao_Locadora"))
     private Locadora locadora;
 
-	
-	public String getCNPJ() {
-		return CNPJ;
-	}
-
-	public void setCNPJ(String CNPJ) {
-		this.CNPJ = CNPJ;
-	}
-
-	public String getCPF() {
-		return CPF;
-	}
-
-	public void setCPF(String CPF) {
-		this.CPF = CPF;
-	}
 
 	public Date getDia() {
 		return dia;
@@ -74,13 +49,4 @@ public class Locacao extends AbstractEntity<Long> {
 		this.horario = horario;
 	}
 
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		sb.append("CNPJ: " + CNPJ + ", ");
-		sb.append("CPF: " + CPF + ", ");
-		sb.append("]");
-		return sb.toString(); 
-	}
 }
