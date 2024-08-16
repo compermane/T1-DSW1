@@ -43,7 +43,7 @@ public class LocadoraController {
         }
         
         attr.addFlashAttribute("sucess", "locadora.create.sucess");
-        return "redirect:/locadoras/listar";
+        return "redirect:/home";
     }
 
     @PostMapping("/editar")

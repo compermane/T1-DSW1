@@ -10,35 +10,35 @@
     <div class = "center-container" layout:fragment="content" th:remove="tag">
         <div class="container">
             <header>
-                <h1>Sistema de Locação de Bicicletas</h1>
                 <h2 th:text="#{usuario.home.welcome(${nome})}"></h2>
             </header>
             <nav>
                 <ul>
-                    <li><a href="@{/logout}">Logout</a></li>
-                    <li><a href="@{/cadastrarLocacao}">Cadastrar locação</a></li>
+                    <li><a th:href="@{/locacoes/cadastrar-locacao}" th:text="#{locacao.cadastrar}"></a></li>
                 </ul>
             </nav>
             <main>
-                <h2>Bem-vindo ao Sistema de Locação de Bicicletas</h2>
-                <p>Utilize os links acima para navegar pelas funcionalidades do sistema.</p>
-                <div id = "locacoesTableContainer">
-                    <table id="locacoesTable">
-                        <tr>
-                            <th>Nome</th>
-                            <th>Cidade</th>
-                            <th>Dia</th>
-                            <th>Horário</th>
-                        </tr>
-                        <c:forEach var="locacao" items="${sessionScope.listaLocacoes}">
+                <h3 th:text="#{home.locacoes}"></h3>
+                <div th:if="${#lists.isEmpty(listaLocacoes)}">
+                    <p th:text="#{home.no.locacoes}"></p>
+                </div>
+                <div th:unless="${#lists.isEmpty(listaLocacoes)}">
+                    <div id = "locacoesTableContainer">
+                        <table id="locacoesTable">
                             <tr>
-                                <td>${locacao.locadora.nome}</td>
-                                <td>${locacao.locadora.cidade}</td>
-                                <td>${locacao.dia}</td>
-                                <td>${locacao.horario}</td>
-                            </tr>
-                        </c:forEach>
-                    </table>
+                                <th>Nome</th>
+                                <th>Cidade</th>
+                                <th>Dia</th>
+                                <th>Horário</th>
+                            </tr>  
+                                <tr th:each="locacao : ${listaLocacoes}">
+                                    <td th:text="${locacao.locadora.nome}"></td>
+                                    <td th:text="${locacao.locadora.cidade}"></td>
+                                    <td th:text="${locacao.dia}"></td>
+                                    <td th:text="${locacao.horario}"></td>
+                                </tr>
+                        </table>
+                    </div>
                 </div>
             </main>
         </div>

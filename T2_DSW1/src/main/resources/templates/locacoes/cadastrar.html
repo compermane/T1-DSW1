@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	    xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{fragments/layout}">
+<head>
+    <title th:text="#{title.label}"></title>
+</head>
+
+<body>
+    <div class = "center-container" layout:fragment="content" th:remove="tag">
+        <div th:if=${#lists.isEmpty(locadoras)}>
+            <form th:action="@{/salvar}" method="post" th:object="${locacao}">
+                <label for="labelLocadora" th:text="#{locacao.cadastrar.locadora}"></label>
+                <p th:text="#{locacao.cadastrar.noLocadora}"></p>
+        
+                <label for="dataLocacao" th:text="#{locacao.cadastrar.date}"></label>
+                <input type="date" id="dataLocacao" name="dataLocacao" disabled value="${locacao.dia}"><br>
+
+                <label for="hora" th:text="#{locacao.cadastrar.time}"></label>
+                <input type="time" id="horario" class="horarioUsado" name="horario" step="3600" disabled/>
+
+                <input type="submit" value="Alugar" disabled>
+            </form>
+        </div>
+        <div th:unless="${#lists.isEmpty(locadoras)}">
+            <form th:action="@{/locacoes/salvar}" method="post" th:object="${locacao}">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="cnpj" th:text="#{locacao.cadastrar.locadora}"></label>
+                            <select id="cnpj" name="cnpj" th:field="*{locadora}">
+                                <option th:each="locadoraSelect : ${locadoras}" 
+                                        th:value="${locadoraSelect.id}" 
+                                        th:text="${locadoraSelect.nome}"></option>
+                            </select>
+                            
+                            <div class="invalid-feedback">
+                                <span th:errors="*{locadora}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="dia" th:text="#{locacao.cadastrar.date}"></label> 
+                            <input type="date" name="dia" class="form-control" id="dia" th:field="*{dia}" required/>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="horario" th:text="#{locacao.cadastrar.time}"></label> 
+                            <select id="horario" name="horario" th:field="*{horario}">
+                                <option value="" th:text="#{locacao.horario.selectHorario}"></option>
+                                <option th:each="hora : ${horariosDisponiveis}" 
+                                        th:value="${hora}" 
+                                        th:text="${hora}"></option>
+                            </select>
+                        </div>
+                    </div>
+                <input type="submit" value="Alugar">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
