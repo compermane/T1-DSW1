@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.aspectj.apache.bcel.generic.LOOKUPSWITCH;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,11 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufscar.dc.dsw.command.ClienteCommand;
+import br.ufscar.dc.dsw.command.LocadoraCommand;
 import br.ufscar.dc.dsw.dao.IClienteDAO;
+import br.ufscar.dc.dsw.dao.ILocadoraDAO;
 import br.ufscar.dc.dsw.dao.IUsuarioDAO;
 import br.ufscar.dc.dsw.domain.Cliente;
+import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.services.spec.IClienteService;
+import br.ufscar.dc.dsw.services.spec.ILocacaoService;
+import br.ufscar.dc.dsw.services.spec.ILocadoraService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -34,22 +40,34 @@ public class AdminController {
     private IClienteService clienteService;
 
     @Autowired
+    private ILocadoraService locadoraService;
+
+    @Autowired
     private IUsuarioDAO usuarioDAO;
 
     @Autowired
     private IClienteDAO clienteDAO;
 
-    // Instancia uma rota GET para o endereço "/"
+    @Autowired
+    private ILocadoraDAO locadoraDAO;
+
     @GetMapping("/crud-cliente")
-    public String getHome(Authentication authentication, Model model, HttpSession session) {
+    public String getCrudCliente(Authentication authentication, Model model, HttpSession session) {
         model.addAttribute("clienteCommand", new ClienteCommand());
         getClientes(model);
         return "/admin/crudCliente";
     }
 
-    @PostMapping("/handle-crud")
-    public String handleCrud(@ModelAttribute("clienteCommand") ClienteCommand clienteCommand, Model model, RedirectAttributes redirectAttributes) {
-        System.out.println("[+] Método handleCrud de AdminController executado");
+    @GetMapping("/crud-locadora")
+    public String getCrudLocadora(Authentication authentication, Model model, HttpSession session) {
+        model.addAttribute("locadoraCommand", new LocadoraCommand());
+        getLocadoras(model);
+        return "/admin/crudLocadora";
+    }
+
+    @PostMapping("/handle-crud-cliente")
+    public String handleCrudCliente(@ModelAttribute("clienteCommand") ClienteCommand clienteCommand, Model model, RedirectAttributes redirectAttributes) {
+        System.out.println("[+] Método handleCrudCliente de AdminController executado");
         String action = clienteCommand.getCrudAction();
         System.out.println("action: " + action);
 
@@ -146,10 +164,110 @@ public class AdminController {
         return "redirect:/admin/crud-cliente";
     }
 
+    @PostMapping("/handle-crud-locadora")
+    public String handleCrudLocadora(@ModelAttribute("locadoraCommand") LocadoraCommand locadoraCommand, Model model, RedirectAttributes redirectAttributes) {
+        System.out.println("[+] Método handleCrudLocadora de AdminController executado");
+        String action = locadoraCommand.getCrudAction();
+        System.out.println("action: " + action);
+
+        switch (action) {
+            case "create":
+                System.out.println("[+] Passou por 'create'");
+                Locadora locadora = new Locadora();
+
+                locadora.setCnpj(locadoraCommand.getCnpj());
+                locadora.setNome(locadoraCommand.getNome());
+                locadora.setCidade(locadoraCommand.getCidade());
+                locadora.setUsername(locadoraCommand.getEmail());
+                locadora.setPassword(locadoraCommand.getSenha());
+                locadora.setRole("ROLE_CLIENTE");
+
+                try {
+                    if(!validateCnpj(locadora.getCnpj())) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "CNPJ ou Email já cadastrado");
+                        throw new Exception("CNPJ já cadastrado");
+                    }
+                    if(!validateEmail(locadora.getUsername())) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "CNPJ ou Email já cadastrado");
+                        throw new Exception("Email já cadastrado");
+                    }
+                    locadoraService.salvar(locadora);
+                }
+                catch(Exception e) {
+                    System.out.println("[-] Erro ao inserir locadora: " + e.getMessage());
+                    e.printStackTrace();
+                    
+                    return "redirect:/admin/crud-locadora";
+                }
+                redirectAttributes.addFlashAttribute("successMessage", "Locadora cadastrado com sucesso");
+                break;
+            
+            case "update":
+                Long id = Long.parseLong(locadoraCommand.getId());
+                Locadora locadoraUpdate = locadoraService.buscarPorID(id);
+
+                String cpf = (locadoraCommand.getCnpj().equals("")) ? locadoraUpdate.getCnpj() : locadoraCommand.getCnpj();
+                String nome = (locadoraCommand.getNome().equals("")) ? locadoraUpdate.getNome() : locadoraCommand.getNome();
+                String cidade = (locadoraCommand.getCidade().equals("")) ? locadoraUpdate.getCidade() : locadoraCommand.getCidade();
+                String username = (locadoraCommand.getEmail().equals("")) ? locadoraUpdate.getUsername() : locadoraCommand.getEmail();
+                String password = (locadoraCommand.getSenha().equals("")) ? locadoraUpdate.getPassword() : locadoraCommand.getSenha();
+
+                locadoraUpdate.setCnpj(cpf);
+                locadoraUpdate.setNome(nome);
+                locadoraUpdate.setCidade(cidade);
+                locadoraUpdate.setUsername(username);
+                locadoraUpdate.setPassword(password);
+
+                try {
+                    locadoraService.salvar(locadoraUpdate);
+                } 
+                catch (Exception e) {
+                    System.out.println("[-] Erro ao atualizar locadora: " + e.getMessage());
+                    e.printStackTrace();
+                    
+                    return "redirect:/admin/crud-locadora";
+                }
+                redirectAttributes.addFlashAttribute("successMessage", "Locadora atualizada com sucesso");
+                break;
+            
+            case "delete":
+                System.out.println("[+] Passou por 'delete'");
+                System.out.println("id: " + locadoraCommand.getId());
+                Long idDelete = Long.parseLong(locadoraCommand.getId());
+
+                try {
+                    clienteService.excluir(idDelete);
+                } catch (Exception e) {
+                    System.out.println("[-] Erro ao deletar cliente: " + e.getMessage());
+                    e.printStackTrace();
+                    
+                    return "redirect:/admin/crud-locadora";
+                }
+                redirectAttributes.addFlashAttribute("successMessage", "Locadora deletada com sucesso");
+                break;
+
+            default:
+                System.out.println("[-] Não sei por que passou aqui");
+                break;
+        }
+
+        return "redirect:/admin/crud-locadora";
+    }
+
     public Boolean validateCpf(String cpf) {
         Cliente cliente = clienteDAO.findByCPF(cpf);
 
         if (cliente == null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public Boolean validateCnpj(String cnpj) {
+        Locadora locadora = locadoraDAO.findByCnpj(cnpj);
+
+        if (locadora == null) {
             return true;
         }
 
@@ -165,7 +283,12 @@ public class AdminController {
 
         return false;
     }
+
     public void getClientes(Model model) {
         model.addAttribute("listaClientes", clienteService.buscarTodos());
+    }
+
+    public void getLocadoras(Model model) {
+        model.addAttribute("listaLocadoras", locadoraService.buscarTodos());
     }
 }

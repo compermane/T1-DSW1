@@ -24,25 +24,21 @@
                         <th>ID</th>
                         <th th:text="#{usuario.email.label}"></th>
                         <th th:text="#{usuario.name.label}"></th>
-                        <th th:text="#{cliente.cpf.label}"></th>
-                        <th th:text="#{cliente.telefone.label}"></th>
-                        <th th:text="#{cliente.sexo.label}"></th>
-                        <th th:text="#{cliente.dataNascimento.label}"></th>
+                        <th th:text="#{locadora.cnpj.label}"></th>
+                        <th th:text="#{locadora.cidade.label}"></th>
                     </tr>
-                        <tr th:each="cliente : ${listaClientes}">
-                            <td th:text="${cliente.id}"></td>
-                            <td th:text="${cliente.username}"></td>
-                            <td th:text="${cliente.nome}"></td>
-                            <td th:text="${cliente.cpf}"></td>
-                            <td th:text="${cliente.telefone}"></td>
-                            <td th:text="${cliente.sexo}"></td>
-                            <td th:text="${cliente.dataNascimento}"></td>
+                        <tr th:each="locadora : ${listaLocadoras}">
+                            <td th:text="${locadora.id}"></td>
+                            <td th:text="${locadora.username}"></td>
+                            <td th:text="${locadora.nome}"></td>
+                            <td th:text="${locadora.cnpj}"></td>
+                            <td th:text="${locadora.cidade}"></td>
                         </tr>
                 </table>
             </div>
             <br> <br> 
-            <form class="crud" th:action="@{/admin/handle-crud-cliente}" method="post" th:object="${clienteCommand}">
-                <input type="hidden" name="action" th:value="${clienteCommand.crudAction}">
+            <form class="crud" th:action="@{/admin/handle-crud-locadora}" method="post" th:object="${locadoraCommand}">
+                <input type="hidden" name="action" th:value="${locadoraCommand.crudAction}">
                 <select name="crudSelectAction" th:field="*{crudAction}" required>
                     <option value="" th:text="#{admin.crud.selectAction}"></option>
                     <option value="create" th:text="#{admin.crud.create}"></option>
@@ -51,8 +47,8 @@
                 </select>
                 <select name="crudSelectId" th:field="*{id}">
                     <option value="" th:text="#{admin.crud.selectID}"></option>
-                    <option th:each="cliente : ${listaClientes}"
-                    th:value="${cliente.id}" th:text="${cliente.id}"></option>
+                    <option th:each="locadora : ${listaLocadoras}"
+                    th:value="${locadora.id}" th:text="${locadora.id}"></option>
                 </select>
                 <label for="emailCrud" th:text="#{admin.crud.email}"></label>
                 <input type="email" name="emailCrud" th:field="*{email}">
@@ -60,22 +56,10 @@
                 <input type="password" name="senhaCrud" th:field="*{senha}">
                 <label for="nomeCrud" th:text="#{admin.crud.nome}"></label>
                 <input type="text" name="nomeCrud" th:field="*{nome}">
-                <label for="documentoCrud" th:text="#{admin.crud.cpf}"></label>
-                <input type="text" name="documentoCrud" th:field="*{cpf}">
-                <label for="telefoneCrud" th:text="#{admin.crud.sexo}"></label>
-                <input type="text" name="telefoneCrud" th:field="*{telefone}">
-                <select name="sexoCrud" th:field="*{sexo}">
-                    <option value="" th:text="#{admin.crud.selectSexo}"></option>
-                    <option value="M">M</option>
-                    <option value="F">F</option>
-                </select>
-                <label for="dataNascimentoCrud" th:text="#{admin.crud.dataNascimento}"></label>
-                <input type="date" name="dataNascimentoCrud" value="0001-01-01" th:field="*{dataNascimento}">
-                <select name="isAdminCrud" th:field="*{isAdmin}">
-                    <option value="" th:text="#{admin.crud.isAdmin}"></option>
-                    <option value="true" th:text="#{admin.crud.yes}"></option>
-                    <option value="false" th:text="#{admin.crud.no}"></option>
-                </select>
+                <label for="documentoCrud" th:text="#{admin.crud.cnpj}"></label>
+                <input type="text" name="documentoCrud" th:field="*{cnpj}">
+                <label for="cidadeCrud" th:text="#{admin.crud.cidade}"></label>
+                <input type="text" name="cidadeCrud" th:field="*{cidade}">
                 <input type="submit" name="execute" th:value="#{admin.crud.execute}">
             </form>
     </div>
