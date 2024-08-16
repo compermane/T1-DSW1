@@ -37,7 +37,7 @@ public class ClienteController {
         }
         
         attr.addFlashAttribute("sucess", "cliente.create.sucess");
-        return "redirect:/home/";
+        return "index";
     }
 
     @PostMapping("/editar")

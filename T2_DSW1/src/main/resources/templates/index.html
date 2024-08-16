@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	    xmlns:th="http://www.thymeleaf.org">
+	    xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{fragments/index_layout}">
 <head>
-    <title>Locadora de Bicicletas - Login</title>
+    <title th:text="#{title.label}"></title>
 </head>
 
 <body>
@@ -15,24 +16,24 @@
         </div>
     </c:if> -->
 
-    <div class = "center-container">
+    <div class = "center-container" layout:fragment="content" th:remove="tag">
         <div class = "form-container">
-        <form class = "loginForm" method = "post" action = "/DSW1_T1/loginController/login">
-            <h1>Login</h1>
-            <div class = "loginInput">
-                <label>Email</label>
-                <input type="email" name = "email"/>
-            </div>
-            <div class = "loginInput">
-            <label>Senha</label>
-            <input type="password" name = "senha" />
-            </div>
-            <div class = "form-footer">
-            <button type="submit">Login</button>
-            <span>Não tem uma conta? Cadastre-se<a th:href="@{/locadoras/signUp-locadora}"> como uma locadora</a> 
-                ou <a th:href="@{/clientes/signUp-cliente}">como um cliente</a></span>
-            </div>
-        </form>
+            <form class = "loginForm" method = "post" th:action = "@{/login}">
+                <h1>Login</h1>
+                <div class = "loginInput">
+                    <label>Email</label>
+                    <input type="email" name = "username" id = "username"/>
+                </div>
+                <div class = "loginInput">
+                <label>Senha</label>
+                <input type="password" name = "password" id = "password"/>
+                </div>
+                <div class = "form-footer">
+                <button type="submit">Login</button>
+                <span>Não tem uma conta? Cadastre-se<a th:href="@{/locadoras/signUp-locadora}"> como uma locadora</a> 
+                    ou <a th:href="@{/clientes/signUp-cliente}">como um cliente</a></span>
+                </div>
+            </form>
 
         <h2 id = "listaLocadorasTitulo">Lista de Locadoras</h2>
         <select name = "selectCidade" id = "selectCidade">

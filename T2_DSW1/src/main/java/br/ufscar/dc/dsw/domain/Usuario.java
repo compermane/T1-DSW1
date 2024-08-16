@@ -18,11 +18,11 @@ public class Usuario extends AbstractEntity<Long> {
 		@NotBlank
 		@UniqueEmail(message = "Email já cadastrado")
 	@Column(nullable = false, unique = true, length = 256)
-	private String email;
+	private String username;
     
 		@NotBlank
 	@Column(nullable = false, unique = false, length = 256)
-	private String senha;
+	private String password;
 	
 		@NotBlank
 	@Column(nullable = false, unique = false, length = 256)
@@ -36,12 +36,12 @@ public class Usuario extends AbstractEntity<Long> {
 	@Column(nullable = false, unique = false, length = 45)
 	private String role;
 
-	public String getEmail() {
-		return email;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getNome() {
@@ -52,12 +52,12 @@ public class Usuario extends AbstractEntity<Long> {
 		this.nome = nome;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public boolean getIsAdmin() {
@@ -80,7 +80,7 @@ public class Usuario extends AbstractEntity<Long> {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		sb.append("Email: " + email + ", ");
+		sb.append("Email: " + username + ", ");
 		sb.append("Nome: " + nome + ", ");
 		sb.append("Admin: " + ((isAdmin) ? "sim" : "não") + ", ");
 		sb.append("Tipo: " + role);

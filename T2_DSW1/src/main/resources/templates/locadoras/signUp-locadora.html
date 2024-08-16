@@ -48,21 +48,21 @@
             <div class="form-group col-md-6">
                 <label th:text="#{usuario.email.label}" for="email"></label> 
                 <input type="email" class="form-control" id="email" autofocus="autofocus"
-                    th:field="*{email}" th:placeholder="#{usuario.email.label}"
-                    th:classappend="${#fields.hasErrors('email')} ? is-invalid" />
+                    th:field="*{username}" th:placeholder="#{usuario.email.label}"
+                    th:classappend="${#fields.hasErrors('username')} ? is-invalid" />
 
                 <div class="invalid-feedback">
-                    <span th:errors="*{email}"></span>
+                    <span th:errors="*{username}"></span>
                 </div>
             </div>
             <div class="form-group col-md-6">
                 <label th:text="#{usuario.senha.label}" for="senha"></label> 
                 <input type="password" class="form-control" id="senha" autofocus="autofocus"
-                    th:field="*{senha}" th:placeholder="#{usuario.senha.label}"
-                    th:classappend="${#fields.hasErrors('senha')} ? is-invalid" />
+                    th:field="*{password}" th:placeholder="#{usuario.senha.label}"
+                    th:classappend="${#fields.hasErrors('password')} ? is-invalid" />
 
                 <div class="invalid-feedback">
-                    <span th:errors="*{senha}"></span>
+                    <span th:errors="*{password}"></span>
                 </div>
             </div>
         </div>

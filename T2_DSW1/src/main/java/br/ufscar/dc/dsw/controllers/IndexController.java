@@ -14,7 +14,7 @@ public class IndexController {
     private ILocadoraService locadoraService;
 
     // Instancia uma rota GET para o endereço "/"
-    @GetMapping("/")
+    @GetMapping("/index")
     public String index(@RequestParam(value = "cidade", required = false) String cidade, ModelMap model) {
         listarLocadoras(cidade, model);
         return "index";
