@@ -19,32 +19,32 @@
     <div class = "center-container" layout:fragment="content" th:remove="tag">
         <div class = "form-container">
             <form class = "loginForm" method = "post" th:action = "@{/login}">
-                <h1>Login</h1>
+                <h1 th:text="#{login.login}"></h1>
                 <div class = "loginInput">
-                    <label>Email</label>
+                    <label th:text="#{login.email}">Email</label>
                     <input type="email" name = "username" id = "username"/>
                 </div>
                 <div class = "loginInput">
-                <label>Senha</label>
+                <label th:text="#{login.senha}">Senha</label>
                 <input type="password" name = "password" id = "password"/>
                 </div>
                 <div class = "form-footer">
-                <button type="submit">Login</button>
+                <button type="submit" th:text="#{login.login}"></button>
                 <span th:utext="#{no.account.log}"></span>
                 </div>
             </form>
 
-        <h2 id = "listaLocadorasTitulo">Lista de Locadoras</h2>
+        <h2 id = "listaLocadorasTitulo" th:text="#{index.locadora.list}"></h2>
         <select name = "selectCidade" id = "selectCidade">
-            <option value = "vazio" selected style = "background-color: gray;">Selecionar cidade</option>
+            <option value = "vazio" selected style = "background-color: gray;" th:text="#{index.select.cidade}"></option>
             <!-- TODO: Adicionar cidades do banco como seleção -->
         </select>
         <div id = "locadorasTableContainer">
             <table>
                 <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>Cidade</th>
+                        <th th:text="#{index.nome.locadora}"></th>
+                        <th th:text="#{index.cidade.locadora}"></th>
                     </tr>
                 </thead>
                 <tbody>

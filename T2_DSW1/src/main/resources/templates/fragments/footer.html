@@ -12,8 +12,8 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-9 col-sm-offset-3">
-										<b><span th:text="#{login.username}"></span>:</b> <span sec:authentication="name"></span> | 
-										<b><span th:text="#{user.role}"></span>:</b> <span sec:authentication="principal.authorities"></span>
+										<b><span th:text="#{login.email}"></span>:</b> <span th:text="${session.user_email}"></span> <br> 
+										<b><span th:text="#{user.role}"></span>:</b> <span th:text="${session.user_role}"></span>
 									</div>
 									<div class="col-sm-3 col-sm-offset-3">
 										<input type="submit" name="login-submit" id="login-submit"

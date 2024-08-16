@@ -26,10 +26,10 @@
                     <div id = "locacoesTableContainer">
                         <table id="locacoesTable">
                             <tr>
-                                <th>Nome</th>
-                                <th>Cidade</th>
-                                <th>Dia</th>
-                                <th>Horário</th>
+                                <th th:text="#{cliente.home.nome}"></th>
+                                <th th:text="#{cliente.home.cidade}"></th>
+                                <th th:text="#{cliente.home.dia}"></th>
+                                <th th:text="#{cliente.home.horario}"></th>
                             </tr>  
                                 <tr th:each="locacao : ${listaLocacoes}">
                                     <td th:text="${locacao.locadora.nome}"></td>

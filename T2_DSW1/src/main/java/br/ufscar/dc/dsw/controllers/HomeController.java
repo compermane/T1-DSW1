@@ -21,6 +21,7 @@ import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.security.UsuarioDetails;
 import br.ufscar.dc.dsw.services.spec.ILocacaoService;
 import br.ufscar.dc.dsw.services.spec.ILocadoraService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/home")
@@ -40,9 +41,10 @@ public class HomeController {
 
     // Instancia uma rota GET para o endereço "/"
     @GetMapping("")
-    public String getHome(Authentication authentication, Model model) {
+    public String getHome(Authentication authentication, Model model, HttpSession session) {
         UsuarioDetails userDetails = (UsuarioDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
+        String role = userDetails.getAuthorities().toString();
         
         Usuario usuario = usuarioDAO.getUserByUsername(username);
         String nome = usuario.getNome();
@@ -56,14 +58,16 @@ public class HomeController {
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         
+        session.setAttribute("user_role", role);
+        session.setAttribute("user_email", username);
         model.addAttribute("nome", nome);
         model.addAttribute("id_logado", usuario.getId());
 
         for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().equals("ROLE_CLIENTE")) {
-                return "homeCliente"; 
+                return "/home/homeCliente"; 
             } else if (authority.getAuthority().equals("ROLE_LOCADORA")) {
-                return "homeLocadora";
+                return "/home/homeLocadora";
             }
         }
         
