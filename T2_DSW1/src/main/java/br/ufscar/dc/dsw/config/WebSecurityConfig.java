@@ -33,7 +33,6 @@ public class WebSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		System.out.println("BRUH bbbb");
         authProvider.setUserDetailsService(userDetailsService());
 		authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         // authProvider.setPasswordEncoder(passwordEncoder());

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.ufscar.dc.dsw.dao.IClienteDAO;
 import br.ufscar.dc.dsw.dao.IUsuarioDAO;
+import br.ufscar.dc.dsw.dao.ILocadoraDAO;
 import br.ufscar.dc.dsw.domain.Cliente;
+import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.security.UsuarioDetails;
 import br.ufscar.dc.dsw.services.spec.ILocacaoService;
@@ -39,6 +41,9 @@ public class HomeController {
     @Autowired
     private IClienteDAO clienteDAO;
 
+    @Autowired
+    private ILocadoraDAO locadoraDAO;
+
     // Instancia uma rota GET para o endereço "/"
     @GetMapping("")
     public String getHome(Authentication authentication, Model model, HttpSession session) {
@@ -49,13 +54,6 @@ public class HomeController {
         Usuario usuario = usuarioDAO.getUserByUsername(username);
         String nome = usuario.getNome();
 
-        Optional<Cliente> optionalCliente = clienteDAO.findById(usuario.getId());
-
-        if (optionalCliente.isPresent()) {
-            Cliente cliente = optionalCliente.get();
-            listarLocacoes(model, cliente);
-        }
-
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         
         session.setAttribute("user_role", role);
@@ -65,9 +63,26 @@ public class HomeController {
 
         for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().equals("ROLE_CLIENTE")) {
+                Optional<Cliente> optionalCliente = clienteDAO.findById(usuario.getId());
+
+                if (optionalCliente.isPresent()) {
+                    Cliente cliente = optionalCliente.get();
+                    listarLocacoes(model, cliente);
+                }
+
                 return "/home/homeCliente"; 
-            } else if (authority.getAuthority().equals("ROLE_LOCADORA")) {
+            } 
+            else if (authority.getAuthority().equals("ROLE_LOCADORA")) {
+                Optional<Locadora> optionalLocadora = locadoraDAO.findById(usuario.getId());
+
+                if (optionalLocadora.isPresent()) {
+                    Locadora locadora = optionalLocadora.get();
+                    listarLocacoesLocadora(model, locadora);
+                }
                 return "/home/homeLocadora";
+            }
+            else {
+                return "/home/homeAdmin";
             }
         }
         
@@ -82,5 +97,9 @@ public class HomeController {
 
     public void listarLocacoes(Model model, Cliente cliente) {
         model.addAttribute("listaLocacoes", locacaoService.buscarTodosPorCliente(cliente));
+    }
+
+    public void listarLocacoesLocadora(Model model, Locadora locadora) {
+        model.addAttribute("listaLocacoesLocadora", locacaoService.buscarTodosPorLocadora(locadora));
     }
 }

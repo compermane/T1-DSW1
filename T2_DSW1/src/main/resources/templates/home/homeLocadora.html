@@ -9,24 +9,23 @@
 <body>
     <div class = "center-container" layout:fragment="content" th:remove="tag">
         <div class="container">
-                <h2 th:text="#{usuario.home.welcome(${nome})}"></h2>
-                <a th:href="@{/locacoes/cadastrar-locacao}" th:text="#{locacao.cadastrar}"></a>
+            <h2 th:text="#{usuario.home.welcome(${nome})}"></h2>
                 <h3 th:text="#{home.locacoes}"></h3>
-                <div th:if="${#lists.isEmpty(listaLocacoes)}">
+                <div th:if="${#lists.isEmpty(listaLocacoesLocadora)}">
                     <p th:text="#{home.no.locacoes}"></p>
                 </div>
-                <div th:unless="${#lists.isEmpty(listaLocacoes)}">
+                <div th:unless="${#lists.isEmpty(listaLocacoesLocadora)}">
                     <div id = "locacoesTableContainer">
                         <table id="locacoesTable">
                             <tr>
-                                <th th:text="#{cliente.home.nome}"></th>
-                                <th th:text="#{cliente.home.cidade}"></th>
-                                <th th:text="#{cliente.home.dia}"></th>
-                                <th th:text="#{cliente.home.horario}"></th>
+                                <th th:text="#{locadora.home.nome}"></th>
+                                <th th:text="#{locadora.home.telefone}"></th>
+                                <th th:text="#{locadora.home.dia}"></th>
+                                <th th:text="#{locadora.home.horario}"></th>
                             </tr>  
-                                <tr th:each="locacao : ${listaLocacoes}">
-                                    <td th:text="${locacao.locadora.nome}"></td>
-                                    <td th:text="${locacao.locadora.cidade}"></td>
+                                <tr th:each="locacao : ${listaLocacoesLocadora}">
+                                    <td th:text="${locacao.cliente.nome}"></td>
+                                    <td th:text="${locacao.cliente.telefone}"></td>
                                     <td th:text="${locacao.dia}"></td>
                                     <td th:text="${locacao.horario}"></td>
                                 </tr>
