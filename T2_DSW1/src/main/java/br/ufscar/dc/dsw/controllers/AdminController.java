@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufscar.dc.dsw.command.ClienteCommand;
+import br.ufscar.dc.dsw.dao.IClienteDAO;
+import br.ufscar.dc.dsw.dao.IUsuarioDAO;
 import br.ufscar.dc.dsw.domain.Cliente;
+import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.services.spec.IClienteService;
 import jakarta.servlet.http.HttpSession;
 
@@ -29,6 +33,12 @@ public class AdminController {
     @Autowired
     private IClienteService clienteService;
 
+    @Autowired
+    private IUsuarioDAO usuarioDAO;
+
+    @Autowired
+    private IClienteDAO clienteDAO;
+
     // Instancia uma rota GET para o endereço "/"
     @GetMapping("/crud-cliente")
     public String getHome(Authentication authentication, Model model, HttpSession session) {
@@ -38,7 +48,7 @@ public class AdminController {
     }
 
     @PostMapping("/handle-crud")
-    public String handleCrud(@ModelAttribute("clienteCommand") ClienteCommand clienteCommand, Model model) {
+    public String handleCrud(@ModelAttribute("clienteCommand") ClienteCommand clienteCommand, Model model, RedirectAttributes redirectAttributes) {
         System.out.println("[+] Método handleCrud de AdminController executado");
         String action = clienteCommand.getCrudAction();
         System.out.println("action: " + action);
@@ -59,6 +69,14 @@ public class AdminController {
                 cliente.setRole("ROLE_CLIENTE");
 
                 try {
+                    if(!validateCpf(cliente.getCpf())) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "CPF ou Email já cadastrado");
+                        throw new Exception("CPF já cadastrado");
+                    }
+                    if(!validateEmail(cliente.getUsername())) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "CPF ou Email já cadastrado");
+                        throw new Exception("Email já cadastrado");
+                    }
                     clienteService.salvar(cliente);
                 }
                 catch(Exception e) {
@@ -67,6 +85,7 @@ public class AdminController {
                     
                     return "redirect:/admin/crud-cliente";
                 }
+                redirectAttributes.addFlashAttribute("successMessage", "Cliente cadastrado com sucesso");
                 break;
             
             case "update":
@@ -100,6 +119,7 @@ public class AdminController {
                     
                     return "redirect:/admin/crud-cliente";
                 }
+                redirectAttributes.addFlashAttribute("successMessage", "Cliente atualizado com sucesso");
                 break;
             
             case "delete":
@@ -115,6 +135,7 @@ public class AdminController {
                     
                     return "redirect:/admin/crud-cliente";
                 }
+                redirectAttributes.addFlashAttribute("successMessage", "Cliente deletado com sucesso");
                 break;
 
             default:
@@ -125,6 +146,25 @@ public class AdminController {
         return "redirect:/admin/crud-cliente";
     }
 
+    public Boolean validateCpf(String cpf) {
+        Cliente cliente = clienteDAO.findByCPF(cpf);
+
+        if (cliente == null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public Boolean validateEmail(String email) {
+        Usuario usuario = usuarioDAO.getUserByUsername(email);
+
+        if (usuario == null) {
+            return true;
+        }
+
+        return false;
+    }
     public void getClientes(Model model) {
         model.addAttribute("listaClientes", clienteService.buscarTodos());
     }
