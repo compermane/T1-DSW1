@@ -4,6 +4,7 @@
         layout:decorate="~{fragments/index_layout}">
 <head>
     <title th:text="#{title.label}"></title>
+    <link th:href="@{/css/index.css}" rel="stylesheet" />
 </head>
 
 <body>
@@ -24,7 +25,8 @@
                 <span th:utext="#{no.account.log}"></span>
                 </div>
             </form>
-
+        </div>
+        <br> <br>
         <h2 id = "listaLocadorasTitulo" th:text="#{index.locadora.list}"></h2>
         <form th:action="@{/}" method="get">
             <select name = "cidade" id = "selectCidade">
