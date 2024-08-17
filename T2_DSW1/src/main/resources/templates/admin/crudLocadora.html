@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	    xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{fragments/layout}">
+
+<head>
+    <title th:text="#{crud.locadora.title}"></title>
+    <style>
+        #clienteTable th, #clienteTable td {
+            padding: 10px 15px; /* Adiciona espaço interno nas células */
+        }
+        
+        #clienteTable {
+            margin-left: 12.25vw;
+            border-spacing: 15px; /* Aumenta o espaçamento entre as colunas */
+        }
+        
+        .crud label,
+        .crud input,
+        .crud select {
+            margin-bottom: 10px; 
+            width: 100%;
+        }
+        
+        .crud input[type="submit"] {
+            width: auto;
+            align-self: flex-start; 
+        }
+        
+        #clienteTable th {
+            margin-left: 10px;
+            background-color: #f2f2f2;
+        }
+        
+        #clienteTable td {
+            border-bottom: 1px solid #ddd; 
+        }
+        
+        .crud input,
+        .crud select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); 
+        }
+
+        .crud {
+        display: block;
+        }
+
+         .crud div {
+            flex: 1 1 calc(50% - 20px); 
+            min-width: 250px;
+        }
+    </style>
+</head>
+
+<div layout:fragment="content" th:remove="tag">
+    <div class="container box-shadow" style="border-radius: 0;">
+        <a th:href="@{/home}" th:text="#{voltar}"></a> <br>
+        <a th:href="@{/admin/crud-cliente}" th:text="#{admin.crud.cliente}"></a> <br>
+        <br> <br>
+        <div th:replace="~{fragments/alert}"></div>
+            <div id = "clienteTableContainer">
+                <table id="clienteTable">
+                    <tr>
+                        <th>ID</th>
+                        <th th:text="#{usuario.email.label}"></th>
+                        <th th:text="#{usuario.name.label}"></th>
+                        <th th:text="#{locadora.cnpj.label}"></th>
+                        <th th:text="#{locadora.cidade.label}"></th>
+                    </tr>
+                        <tr th:each="locadora : ${listaLocadoras}">
+                            <td th:text="${locadora.id}"></td>
+                            <td th:text="${locadora.username}"></td>
+                            <td th:text="${locadora.nome}"></td>
+                            <td th:text="${locadora.cnpj}"></td>
+                            <td th:text="${locadora.cidade}"></td>
+                        </tr>
+                </table>
+            </div>
+            <br> <br> 
+            <form class="crud box-shadow" th:action="@{/admin/handle-crud-locadora}" method="post" th:object="${locadoraCommand}">
+                <div class="form-row">
+                    <input type="hidden" name="action" th:value="${locadoraCommand.crudAction}">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <select name="crudSelectAction" th:field="*{crudAction}" required>
+                                <option value="" th:text="#{admin.crud.selectAction}"></option>
+                                <option value="create" th:text="#{admin.crud.create}"></option>
+                                <option value="update" th:text="#{admin.crud.update}"></option>
+                                <option value="delete" th:text="#{admin.crud.delete}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select name="crudSelectId" th:field="*{id}">
+                                <option value="" th:text="#{admin.crud.selectID}"></option>
+                                <option th:each="locadora : ${listaLocadoras}"
+                                th:value="${locadora.id}" th:text="${locadora.id}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailCrud" th:text="#{admin.crud.email}"></label>
+                            <input type="email" name="emailCrud" th:field="*{email}">
+                        </div>
+                
+                        <div class="form-group">
+                            <label for="senhaCrud" th:text="#{admin.crud.senha}"></label>
+                            <input type="password" name="senhaCrud" th:field="*{senha}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">    
+                        <div class="form-group">
+                            <label for="nomeCrud" th:text="#{admin.crud.nome}"></label>
+                            <input type="text" name="nomeCrud" th:field="*{nome}">
+                        </div>
+                        <div class="form-group">
+                            <label for="documentoCrud" th:text="#{admin.crud.cnpj}"></label>
+                            <input type="text" name="documentoCrud" th:field="*{cnpj}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cidadeCrud" th:text="#{admin.crud.cidade}"></label>
+                            <input type="text" name="cidadeCrud" th:field="*{cidade}">
+                        </div>
+                    </div>
+                    <div class="form-group col-12">
+                    <input type="submit" name="execute" th:value="#{admin.crud.execute}">
+                    </div>
+                </div>
+            </form>
+    </div>
+</div>
+</html>

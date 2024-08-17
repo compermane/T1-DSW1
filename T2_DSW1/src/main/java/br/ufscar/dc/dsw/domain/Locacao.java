@@ -3,24 +3,24 @@ package br.ufscar.dc.dsw.domain;
 import java.sql.Date;
 import java.sql.Time;
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.ForeignKey;
-import jakarta.validation.constraints.NotBlank;
 
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "Locacao")
 public class Locacao extends AbstractEntity<Long> {
-        @NotBlank
+    @NotNull
     @Column(nullable = false, unique = false, length = 256)
     private Date dia;
     
-        @NotBlank
+    @NotNull
     @Column(nullable = false, unique = false, length = 256)
     private Time horario;
 
@@ -49,4 +49,19 @@ public class Locacao extends AbstractEntity<Long> {
 		this.horario = horario;
 	}
 
+    public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+    public Locadora getLocadora() {
+		return locadora;
+	}
+
+	public void setLocadora(Locadora locadora) {
+		this.locadora = locadora;
+	}   
 }

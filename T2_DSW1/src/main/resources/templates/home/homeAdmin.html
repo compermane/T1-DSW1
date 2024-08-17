@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	    xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{fragments/layout}">
+<head>
+    <title th:text="#{title.label}"></title>
+</head>
+
+<body>
+    <div class = "center-container" layout:fragment="content" th:remove="tag">
+        <div class="container box-shadow" style="border-radius: 0;">
+            <h2 th:text="#{usuario.home.welcome(${nome})}"></h2>
+            <a th:href="@{/admin/crud-cliente}" th:text="#{admin.crud.cliente}"></a> <br>
+            <a th:href="@{/admin/crud-locadora}" th:text="#{admin.crud.locadora}"></a>
+        </div>
+    </div>
+</body>
+</html>

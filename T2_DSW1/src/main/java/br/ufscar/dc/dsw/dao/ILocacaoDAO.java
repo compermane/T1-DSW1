@@ -7,18 +7,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import br.ufscar.dc.dsw.domain.Locacao;
+import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.domain.Cliente;
 
 @SuppressWarnings("unchecked")
-public interface IClienteDAO extends CrudRepository<Cliente, Long>{
+public interface ILocacaoDAO extends CrudRepository<Locacao, Long>{
 
-	Optional<Cliente> findById(Long id);
-	List<Cliente> findAll();
+	Optional<Locacao> findById(Long id);
+	List<Locacao> findAll();
 	
-	Cliente save(Cliente usuario);
+	Locacao save(Locacao locacao);
 
 	void deleteById(Long id);
 
-	@Query("SELECT c FROM Cliente c WHERE c.cpf = :cpf")
-	public Cliente findByCPF(@Param("cpf") String cpf);
+    List<Locacao> findAllByCliente(Cliente cliente);
+    List<Locacao> findAllByLocadora(Locadora locadora);
 }

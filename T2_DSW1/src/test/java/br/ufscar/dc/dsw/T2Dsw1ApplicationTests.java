@@ -1,4 +1,4 @@
-package br.ufscar.dc.dsw.T2_DSW1;
+package br.ufscar.dc.dsw;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import br.ufscar.dc.dsw.dao.ILocadoraDAO;
-import br.ufscar.dc.dsw.domain.Locadora;
+// import br.ufscar.dc.dsw.domain.Locadora;
 
 @SpringBootApplication(scanBasePackages = "br.ufscar.dc.dsw")
 public class T2Dsw1Application {

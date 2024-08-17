@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	    xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{fragments/layout}">
+<head>
+    <title th:text="#{title.label}"></title>    
+    <style>
+    th, td {
+        padding: 10px 15px; /* Adiciona espaço interno nas células */
+    }
+        
+    table {
+        margin-top: 2vh;
+        border-spacing: 15px; /* Aumenta o espaçamento entre as colunas */
+        width: 30vw;
+        /* padding: 2rem; */
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+
+    th {
+        background-color: #f2f2f2; /* Cor de fundo para o cabeçalho */
+    }
+
+    td {
+        border-bottom: 1px solid #ddd; /* Linha separadora para as células */
+    }
+
+    .locacoesContainer h3{
+        margin-top: 5vh;
+    }
+    </style>
+</head>
+
+<body>
+    <div class = "center-container" layout:fragment="content" th:remove="tag">
+        <div class="container">
+            <h2 th:text="#{usuario.home.welcome(${nome})}"></h2>
+            <div class="locacoesContainer">
+                <h3 th:text="#{home.locacoes}"></h3>
+                <div th:if="${#lists.isEmpty(listaLocacoesLocadora)}">
+                    <p th:text="#{home.no.locacoes}"></p>
+                </div>
+                <div th:unless="${#lists.isEmpty(listaLocacoesLocadora)}">
+                    <div id = "locacoesTableContainer">
+                        <table id="locacoesTable">
+                            <tr>
+                                <th th:text="#{locadora.home.nome}"></th>
+                                <th th:text="#{locadora.home.telefone}"></th>
+                                <th th:text="#{locadora.home.dia}"></th>
+                                <th th:text="#{locadora.home.horario}"></th>
+                            </tr>  
+                                <tr th:each="locacao : ${listaLocacoesLocadora}">
+                                    <td th:text="${locacao.cliente.nome}"></td>
+                                    <td th:text="${locacao.cliente.telefone}"></td>
+                                    <td th:text="${locacao.dia}"></td>
+                                    <td th:text="${locacao.horario}"></td>
+                                </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
