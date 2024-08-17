@@ -7,32 +7,35 @@
 </head>
 
 <body>
-    <div class = "center-container" layout:fragment="content" th:remove="tag">
-        <div th:if="${errorMessage != null}">
-            <p th:text="${errorMessage}"></p>
-        </div>
-        <div th:if=${#lists.isEmpty(locadoras)}>
+    <div class = "container" layout:fragment="content" th:remove="tag">
+        <div th:replace="~{fragments/alert}"></div>
+        <div th:if=${#lists.isEmpty(locadoras)} class="container">
             <a th:href="@{/home}" th:text="#{voltar}"></a>
-            <form th:action="@{/salvar}" method="post" th:object="${locacao}">
-                <label for="labelLocadora" th:text="#{locacao.cadastrar.locadora}"></label>
-                <p th:text="#{locacao.cadastrar.noLocadora}"></p>
-        
-                <label for="dataLocacao" th:text="#{locacao.cadastrar.date}"></label>
-                <input type="date" id="dataLocacao" name="dataLocacao" disabled value="${locacao.dia}"><br>
-
-                <label for="hora" th:text="#{locacao.cadastrar.time}"></label>
-                <input type="time" id="horario" class="horarioUsado" name="horario" step="3600" disabled/>
-
-                <input type="submit" value="Alugar" disabled>
+            <form class="box-shadow" th:action="@{/salvar}" method="post" th:object="${locacao}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="labelLocadora" th:text="#{locacao.cadastrar.locadora}"></label>
+                       <p th:text="#{locacao.cadastrar.noLocadora}"></p>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="dataLocacao" th:text="#{locacao.cadastrar.date}"></label>
+                        <input type="date" class="form-control" id="dataLocacao" name="dataLocacao" disabled value="${locacao.dia}"><br>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="hora" th:text="#{locacao.cadastrar.time}"></label>
+                        <input type="time" class="form-control" id="horario"name="horario" step="3600" disabled/>
+                    </div>
+                    <input type="submit" value="Alugar" disabled>
+                </div>
             </form>
         </div>
-        <div th:unless="${#lists.isEmpty(locadoras)}">
+        <div th:unless="${#lists.isEmpty(locadoras)}" class="container">
             <a th:href="@{/home}" th:text="#{voltar}"></a>
-            <form th:action="@{/locacoes/salvar}" method="post" th:object="${locacao}">
+            <form class="box-shadow" style="margin-top: 5vh;"th:action="@{/locacoes/salvar}" method="post" th:object="${locacao}">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="cnpj" th:text="#{locacao.cadastrar.locadora}"></label>
-                            <select id="cnpj" name="cnpj" th:field="*{locadora}">
+                            <select class="form-control" id="cnpj" name="cnpj" th:field="*{locadora}">
                                 <option th:each="locadoraSelect : ${locadoras}" 
                                         th:value="${locadoraSelect.id}" 
                                         th:text="${locadoraSelect.nome}"></option>
@@ -49,7 +52,7 @@
 
                         <div class="form-group col-md-6">
                             <label for="horario" th:text="#{locacao.cadastrar.time}"></label> 
-                            <select id="horario" name="horario" th:field="*{horario}">
+                            <select class="form-control" id="horario" name="horario" th:field="*{horario}">
                                 <option value="" th:text="#{locacao.horario.selectHorario}"></option>
                                 <option th:each="hora : ${horariosDisponiveis}" 
                                         th:value="${hora}" 
@@ -57,7 +60,7 @@
                             </select>
                         </div>
                     </div>
-                <input type="submit" value="Alugar">
+                <input class = "footerButton" type="submit" value="Alugar">
             </form>
         </div>
     </div>

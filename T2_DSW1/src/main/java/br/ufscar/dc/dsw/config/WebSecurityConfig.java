@@ -43,16 +43,6 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return (request, response, authException) -> response.sendRedirect("/");
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, accessDeniedException) -> response.sendRedirect("/access-denied");
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((requests) -> requests
@@ -64,7 +54,7 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form
-                .loginPage("/index")
+                .loginPage("/")
 				.loginProcessingUrl("/login")
 				.defaultSuccessUrl("/home", true)
                 .permitAll()
@@ -72,10 +62,6 @@ public class WebSecurityConfig {
             .logout((logout) -> logout
                 .logoutSuccessUrl("/")
                 .permitAll()
-            )
-            .exceptionHandling((exceptions) -> exceptions
-                .authenticationEntryPoint(authenticationEntryPoint())
-                .accessDeniedHandler(accessDeniedHandler())
             );
 
         return http.build();

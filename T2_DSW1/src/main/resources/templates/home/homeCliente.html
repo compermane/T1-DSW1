@@ -4,33 +4,58 @@
         layout:decorate="~{fragments/layout}">
 <head>
     <title th:text="#{title.label}"></title>
+
+    <style>
+    th, td {
+        padding: 10px 15px; /* Adiciona espaço interno nas células */
+    }
+        
+    table {
+        margin-top: 2vh;
+        border-spacing: 15px; /* Aumenta o espaçamento entre as colunas */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Cor de fundo para o cabeçalho */
+    }
+
+    td {
+        border-bottom: 1px solid #ddd; /* Linha separadora para as células */
+    }
+
+    .locacoesContainer h3{
+        margin-top: 5vh;
+    }
+    </style>
 </head>
 
 <body>
     <div class = "center-container" layout:fragment="content" th:remove="tag">
-        <div class="container">
+        <div class="container box-shadow" style="border-radius: 0%;">
                 <h2 th:text="#{usuario.home.welcome(${nome})}"></h2>
                 <a th:href="@{/locacoes/cadastrar-locacao}" th:text="#{locacao.cadastrar}"></a>
+                <div class="locacoesContainer">
                 <h3 th:text="#{home.locacoes}"></h3>
                 <div th:if="${#lists.isEmpty(listaLocacoes)}">
                     <p th:text="#{home.no.locacoes}"></p>
                 </div>
-                <div th:unless="${#lists.isEmpty(listaLocacoes)}">
-                    <div id = "locacoesTableContainer">
-                        <table id="locacoesTable">
-                            <tr>
-                                <th th:text="#{cliente.home.nome}"></th>
-                                <th th:text="#{cliente.home.cidade}"></th>
-                                <th th:text="#{cliente.home.dia}"></th>
-                                <th th:text="#{cliente.home.horario}"></th>
-                            </tr>  
-                                <tr th:each="locacao : ${listaLocacoes}">
-                                    <td th:text="${locacao.locadora.nome}"></td>
-                                    <td th:text="${locacao.locadora.cidade}"></td>
-                                    <td th:text="${locacao.dia}"></td>
-                                    <td th:text="${locacao.horario}"></td>
-                                </tr>
-                        </table>
+                    <div th:unless="${#lists.isEmpty(listaLocacoes)}">
+                        <div id = "locacoesTableContainer">
+                            <table id="locacoesTable">
+                                <tr>
+                                    <th th:text="#{cliente.home.nome}"></th>
+                                    <th th:text="#{cliente.home.cidade}"></th>
+                                    <th th:text="#{cliente.home.dia}"></th>
+                                    <th th:text="#{cliente.home.horario}"></th>
+                                </tr>  
+                                    <tr th:each="locacao : ${listaLocacoes}">
+                                        <td th:text="${locacao.locadora.nome}"></td>
+                                        <td th:text="${locacao.locadora.cidade}"></td>
+                                        <td th:text="${locacao.dia}"></td>
+                                        <td th:text="${locacao.horario}"></td>
+                                    </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
         </div>

@@ -5,6 +5,7 @@
 <head>
     <title th:text="#{title.label}"></title>
     <link th:href="@{/css/index.css}" rel="stylesheet" />
+    </style>
 </head>
 
 <body>
@@ -27,33 +28,35 @@
             </form>
         </div>
         <br> <br>
-        <h2 id = "listaLocadorasTitulo" th:text="#{index.locadora.list}"></h2>
-        <form th:action="@{/}" method="get">
-            <select name = "cidade" id = "selectCidade">
-                <option value = "" selected style = "background-color: gray;" th:text="#{index.select.cidade}"></option>
-                <option value = "Todas" th:text="#{index.select.todas}"></option>
-                <option th:each="locadora : ${listaTodasLocadoras}"
-                        th:value="${locadora.cidade}" 
-                        th:text="${locadora.cidade}"
-                        th:selected="${locadora.cidade == cidadeSelecionada}"></option>
-            </select>
-            <input type="submit" th:value="#{index.listar}">
-        </form>
-        <div id = "locadorasTableContainer">
-            <table>
-                <thead>
-                    <tr>
-                        <th th:text="#{index.nome.locadora}"></th>
-                        <th th:text="#{index.cidade.locadora}"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="locadora : ${listaLocadoras}">
-                        <td th:text="${locadora.nome}">Nome da Locadora</td>
-                        <td th:text="${locadora.cidade}">Cidade da Locadora</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="indexCompanyInfo">
+            <h2 id = "listaLocadorasTitulo" th:text="#{index.locadora.list}"></h2>
+            <form th:action="@{/}" method="get">
+                <select name = "cidade" id = "selectCidade">
+                    <option value = "" selected style = "background-color: gray;" th:text="#{index.select.cidade}"></option>
+                    <option value = "Todas" th:text="#{index.select.todas}"></option>
+                    <option th:each="locadora : ${listaTodasLocadoras}"
+                            th:value="${locadora.cidade}" 
+                            th:text="${locadora.cidade}"
+                            th:selected="${locadora.cidade == cidadeSelecionada}"></option>
+                </select>
+                <input type="submit" th:value="#{index.listar}">
+            </form>
+            <div id = "locadorasTableContainer">
+                <table style="margin-bottom: 5vh;">
+                    <thead>
+                        <tr>
+                            <th th:text="#{index.nome.locadora}"></th>
+                            <th th:text="#{index.cidade.locadora}"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="locadora : ${listaLocadoras}">
+                            <td th:text="${locadora.nome}">Nome da Locadora</td>
+                            <td th:text="${locadora.cidade}">Cidade da Locadora</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </body>

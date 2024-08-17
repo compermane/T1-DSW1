@@ -10,7 +10,7 @@
 <body>
     <div layout:fragment="content" th:remove="tag">
     <h1 th:text="#{cadastro.locadora}"></h1>
-    <form 
+    <form class="box-shadow"
         th:action="@{/locadoras/salvar}" 
         th:object="${locadora}" method="post">
         <div class="form-row">
@@ -71,8 +71,7 @@
 
         <input type="hidden" id="role" th:field="*{role}" th:value="'ROLE_LOCADORA'" />
         <input type="hidden" id="id" th:field="*{id}" />
-        <button type="submit" th:text="#{button.cadastrar}"
-            class="btn btn-primary btn-sm"></button>
+        <button type="submit" th:text="#{button.cadastrar}" class="footerButton"></button>
     </form>
     </div>
 </body>

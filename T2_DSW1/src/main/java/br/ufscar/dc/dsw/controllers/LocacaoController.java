@@ -81,9 +81,10 @@ public class LocacaoController {
             locacaoService.salvar(locacao);
         }
         catch(Exception e) {
-            System.out.println("[-] Erro ao cadastrar locadora: " + e.getMessage());
+            System.out.println("[-] Erro ao cadastrar locacao: " + e.getMessage());
             e.printStackTrace();
 
+            attr.addFlashAttribute("errorMessage", "locacao.create.error");
             return "redirect:/locacoes/cadastrar-locacao";
         }
         

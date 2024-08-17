@@ -1,11 +1,18 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<style>
+		nav {
+			position: absolute;
+		}
+	</style>
+</head>
 <body>
 	<th:block th:fragment="header">
 		<nav class="navbar navbar-inverse navbar-static-top">
 			<div class="container">
 				<div class="navbar-header">
-					<div style="right: 10px; position: absolute">
+					<div style="right: 10px;">
 						<a th:href="@{''(lang=pt)}"><img alt=""
 							th:src="@{/image/Brasil.gif}" style="width: 30px;" /></a> <a
 							th:href="@{''(lang=en)}"><img alt=""

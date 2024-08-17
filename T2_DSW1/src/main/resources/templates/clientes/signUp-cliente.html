@@ -10,7 +10,7 @@
 <body>
     <div layout:fragment="content" th:remove="tag">
     <h1 th:text="#{cliente.cadastrar.label}"></h1>
-    <form 
+    <form class="box-shadow"
         th:action="@{/clientes/salvar}" 
         th:object="${cliente}" method="post">
         <div class="form-row">
@@ -92,8 +92,7 @@
 
         <input type="hidden" id="role" th:field="*{role}" th:value="'ROLE_CLIENTE'" />
         <input type="hidden" id="id" th:field="*{id}" />
-        <button type="submit" th:text="#{button.cadastrar}"
-            class="btn btn-primary btn-sm"></button>
+        <button class="footerButton" type="submit" th:text="#{button.cadastrar}"></button>
     </form>
     </div>
 </body>

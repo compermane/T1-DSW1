@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 html {
-    font-family: 'Poppins', sans-serif
+    font-family: 'Poppins', sans-serif !important;
 }
 body {
-    background-color: white;
+    background-color: #f9f8f5;
 }
 
 /*
@@ -126,4 +126,56 @@ body {
 	display: block;
 	color: #777777;
 	text-align: center;
+}
+
+.box-shadow {
+    /* margin-left: 12vw; */
+    background-color: white;
+    width: 100%;
+    padding: 2rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 5%;
+}
+
+.footerButton {
+    width: 10vw;
+    height: 3vh;
+    background-color: white;
+    border: 1.5px solid black;
+    border-radius: 20px;
+    height: 5vh;
+    width: 10vw ;
+    font-size: 16px;
+}
+
+.footerButton:hover {
+    background-color: black;
+    border: 1.5px solid white;
+    transition: 0.6s;
+    color: white;
+}
+
+th, td {
+    padding: 10px 15px; /* Adiciona espaço interno nas células */
+}
+    
+table {
+    margin-top: 2vh;
+    border-spacing: 15px; /* Aumenta o espaçamento entre as colunas */
+    width: 30vw;
+    /* padding: 2rem; */
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+th {
+    background-color: #f2f2f2; /* Cor de fundo para o cabeçalho */
+}
+
+td {
+    background-color: white;
+    border-bottom: 1px solid #ddd; /* Linha separadora para as células */
+}
+
+.locacoesContainer h3{
+    margin-top: 5vh;
 }
