@@ -2,9 +2,9 @@ package br.ufscar.dc.dsw.services.spec;
 
 import java.util.List;
 
+import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Locacao;
 import br.ufscar.dc.dsw.domain.Locadora;
-import br.ufscar.dc.dsw.domain.Cliente;
 
 public interface ILocacaoService {
     Locacao buscarPorID(Long id);

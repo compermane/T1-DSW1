@@ -12,12 +12,7 @@
         <a th:href="@{/home}" th:text="#{voltar}"></a> <br>
         <a th:href="@{/admin/crud-locadora}" th:text="#{admin.crud.locadora}"></a> <br>
         <br> <br>
-            <div th:if="${errorMessage != null}">
-                <p th:text="${errorMessage}"></p>
-            </div>
-            <div th:if="${successMessage != null}">
-                <p th:text="${successMessage}"></p>
-            </div>
+        <div th:replace="~{fragments/alert}"></div>
             <div id = "clienteTableContainer">
                 <table id="clienteTable">
                     <tr>

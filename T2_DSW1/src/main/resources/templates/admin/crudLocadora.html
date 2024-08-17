@@ -4,20 +4,15 @@
         layout:decorate="~{fragments/layout}">
 
 <head>
-    <title th:text="#{crud.cliente.title}"></title>
+    <title th:text="#{crud.locadora.title}"></title>
 </head>
 
 <div layout:fragment="content" th:remove="tag">
     <div class="container">
         <a th:href="@{/home}" th:text="#{voltar}"></a> <br>
-        <a th:href="@{/admin/crud-locadora}" th:text="#{admin.crud.locadora}"></a> <br>
+        <a th:href="@{/admin/crud-cliente}" th:text="#{admin.crud.cliente}"></a> <br>
         <br> <br>
-            <div th:if="${errorMessage != null}">
-                <p th:text="${errorMessage}"></p>
-            </div>
-            <div th:if="${successMessage != null}">
-                <p th:text="${successMessage}"></p>
-            </div>
+        <div th:replace="~{fragments/alert}"></div>
             <div id = "clienteTableContainer">
                 <table id="clienteTable">
                     <tr>

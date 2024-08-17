@@ -2,16 +2,11 @@ package br.ufscar.dc.dsw.controllers;
 
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.sql.Date;
-import java.util.Collection;
-import java.util.Optional;
 
-import org.aspectj.apache.bcel.generic.LOOKUPSWITCH;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,7 +23,6 @@ import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.services.spec.IClienteService;
-import br.ufscar.dc.dsw.services.spec.ILocacaoService;
 import br.ufscar.dc.dsw.services.spec.ILocadoraService;
 import jakarta.servlet.http.HttpSession;
 
@@ -88,11 +82,11 @@ public class AdminController {
 
                 try {
                     if(!validateCpf(cliente.getCpf())) {
-                        redirectAttributes.addFlashAttribute("errorMessage", "CPF ou Email já cadastrado");
+                        redirectAttributes.addFlashAttribute("errorMessage", "ja.cadastrado");
                         throw new Exception("CPF já cadastrado");
                     }
                     if(!validateEmail(cliente.getUsername())) {
-                        redirectAttributes.addFlashAttribute("errorMessage", "CPF ou Email já cadastrado");
+                        redirectAttributes.addFlashAttribute("errorMessage", "ja.cadastrado");
                         throw new Exception("Email já cadastrado");
                     }
                     clienteService.salvar(cliente);
@@ -100,10 +94,11 @@ public class AdminController {
                 catch(Exception e) {
                     System.out.println("[-] Erro ao inserir cliente: " + e.getMessage());
                     e.printStackTrace();
-                    
+                    redirectAttributes.addFlashAttribute("errorMessage", "cliente.error.create");
+
                     return "redirect:/admin/crud-cliente";
                 }
-                redirectAttributes.addFlashAttribute("successMessage", "Cliente cadastrado com sucesso");
+                redirectAttributes.addFlashAttribute("successMessage", "cliente.success.create");
                 break;
             
             case "update":
@@ -134,10 +129,11 @@ public class AdminController {
                 catch (Exception e) {
                     System.out.println("[-] Erro ao atualizar cliente: " + e.getMessage());
                     e.printStackTrace();
-                    
+                    redirectAttributes.addFlashAttribute("errorMessage", "cliente.error.update");
+
                     return "redirect:/admin/crud-cliente";
                 }
-                redirectAttributes.addFlashAttribute("successMessage", "Cliente atualizado com sucesso");
+                redirectAttributes.addFlashAttribute("successMessage", "cliente.success.update");
                 break;
             
             case "delete":
@@ -150,10 +146,11 @@ public class AdminController {
                 } catch (Exception e) {
                     System.out.println("[-] Erro ao deletar cliente: " + e.getMessage());
                     e.printStackTrace();
-                    
+                    redirectAttributes.addFlashAttribute("errorMessage", "cliente.error.delete");
+
                     return "redirect:/admin/crud-cliente";
                 }
-                redirectAttributes.addFlashAttribute("successMessage", "Cliente deletado com sucesso");
+                redirectAttributes.addFlashAttribute("successMessage", "cliente.success.delete");
                 break;
 
             default:
@@ -184,11 +181,11 @@ public class AdminController {
 
                 try {
                     if(!validateCnpj(locadora.getCnpj())) {
-                        redirectAttributes.addFlashAttribute("errorMessage", "CNPJ ou Email já cadastrado");
+                        redirectAttributes.addFlashAttribute("errorMessage", "ja.cadastrado");
                         throw new Exception("CNPJ já cadastrado");
                     }
                     if(!validateEmail(locadora.getUsername())) {
-                        redirectAttributes.addFlashAttribute("errorMessage", "CNPJ ou Email já cadastrado");
+                        redirectAttributes.addFlashAttribute("errorMessage", "ja.cadastrado");
                         throw new Exception("Email já cadastrado");
                     }
                     locadoraService.salvar(locadora);
@@ -196,10 +193,11 @@ public class AdminController {
                 catch(Exception e) {
                     System.out.println("[-] Erro ao inserir locadora: " + e.getMessage());
                     e.printStackTrace();
-                    
+                    redirectAttributes.addFlashAttribute("errorMessage", "locadora.create.error");
+
                     return "redirect:/admin/crud-locadora";
                 }
-                redirectAttributes.addFlashAttribute("successMessage", "Locadora cadastrado com sucesso");
+                redirectAttributes.addFlashAttribute("successMessage", "locadora.create.sucess");
                 break;
             
             case "update":
@@ -224,10 +222,11 @@ public class AdminController {
                 catch (Exception e) {
                     System.out.println("[-] Erro ao atualizar locadora: " + e.getMessage());
                     e.printStackTrace();
-                    
+                    redirectAttributes.addFlashAttribute("errorMessage", "locadora.update.error");
+
                     return "redirect:/admin/crud-locadora";
                 }
-                redirectAttributes.addFlashAttribute("successMessage", "Locadora atualizada com sucesso");
+                redirectAttributes.addFlashAttribute("successMessage", "locadora.update.success");
                 break;
             
             case "delete":
@@ -240,10 +239,11 @@ public class AdminController {
                 } catch (Exception e) {
                     System.out.println("[-] Erro ao deletar cliente: " + e.getMessage());
                     e.printStackTrace();
-                    
+                    redirectAttributes.addFlashAttribute("errorMessage", "locadora.delete.error");
+
                     return "redirect:/admin/crud-locadora";
                 }
-                redirectAttributes.addFlashAttribute("successMessage", "Locadora deletada com sucesso");
+                redirectAttributes.addFlashAttribute("successMessage", "locadora.delete.success");
                 break;
 
             default:

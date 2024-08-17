@@ -36,7 +36,7 @@ public class ClienteController {
             e.printStackTrace();
         }
         
-        attr.addFlashAttribute("sucess", "cliente.create.sucess");
+        attr.addFlashAttribute("sucessMessage", "cliente.create.sucess");
         return "index";
     }
 

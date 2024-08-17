@@ -67,13 +67,16 @@ public class LocacaoController {
     public String cadastrarLocacao(@Valid Locacao locacao, BindingResult result, RedirectAttributes attr) {
         System.out.println("[+] Método salvar de LocacaoController executado");
         try {
-            System.out.println("horario recebido: " + locacao.getHorario() );
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String email = auth.getName();
 
             Usuario usuario = usuarioDAO.getUserByUsername(email);
             Cliente cliente = clienteService.buscarPorID(usuario.getId());
 
+            if (!validateLocacao(cliente, locacao)) {
+                attr.addFlashAttribute("errorMessage", "dia.horario.alugados");
+                throw new Exception("Dia e horário já alugados");
+            }
             locacao.setCliente(cliente);
             locacaoService.salvar(locacao);
         }
@@ -84,8 +87,18 @@ public class LocacaoController {
             return "redirect:/locacoes/cadastrar-locacao";
         }
         
-        attr.addFlashAttribute("sucess", "locadora.create.sucess");
+        attr.addFlashAttribute("sucessMessage", "locacao.create.sucess");
         return "redirect:/home";
     }
 
+    public Boolean validateLocacao(Cliente cliente, Locacao locacao) {
+        List<Locacao> listaLocacoes = locacaoService.buscarTodosPorCliente(cliente);
+
+        for (Locacao Ilocacao : listaLocacoes) {
+            if (Ilocacao.getHorario().equals(locacao.getHorario()) && Ilocacao.getDia().equals(locacao.getDia())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

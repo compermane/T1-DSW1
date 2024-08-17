@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.ForeignKey;
-import jakarta.validation.constraints.NotBlank;
 
 
 @SuppressWarnings("serial")

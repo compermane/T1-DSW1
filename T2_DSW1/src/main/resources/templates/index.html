@@ -7,15 +7,6 @@
 </head>
 
 <body>
-    <!-- Mensagem de erro do login -->
-    <!-- <c:if test="${not empty errorMessage}">
-        <div class="erro">
-            <c:forEach var="erro" items="${errorMessage}">
-                <h3>${erro}</h3>
-            </c:forEach>
-        </div>
-    </c:if> -->
-
     <div class = "center-container" layout:fragment="content" th:remove="tag">
         <div class = "form-container">
             <form class = "loginForm" method = "post" th:action = "@{/login}">
@@ -35,10 +26,17 @@
             </form>
 
         <h2 id = "listaLocadorasTitulo" th:text="#{index.locadora.list}"></h2>
-        <select name = "selectCidade" id = "selectCidade">
-            <option value = "vazio" selected style = "background-color: gray;" th:text="#{index.select.cidade}"></option>
-            <!-- TODO: Adicionar cidades do banco como seleção -->
-        </select>
+        <form th:action="@{/}" method="get">
+            <select name = "cidade" id = "selectCidade">
+                <option value = "" selected style = "background-color: gray;" th:text="#{index.select.cidade}"></option>
+                <option value = "Todas" th:text="#{index.select.todas}"></option>
+                <option th:each="locadora : ${listaTodasLocadoras}"
+                        th:value="${locadora.cidade}" 
+                        th:text="${locadora.cidade}"
+                        th:selected="${locadora.cidade == cidadeSelecionada}"></option>
+            </select>
+            <input type="submit" th:value="#{index.listar}">
+        </form>
         <div id = "locadorasTableContainer">
             <table>
                 <thead>
@@ -48,7 +46,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="locadora : ${locadoras}">
+                    <tr th:each="locadora : ${listaLocadoras}">
                         <td th:text="${locadora.nome}">Nome da Locadora</td>
                         <td th:text="${locadora.cidade}">Cidade da Locadora</td>
                     </tr>

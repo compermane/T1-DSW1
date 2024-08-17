@@ -8,7 +8,11 @@
 
 <body>
     <div class = "center-container" layout:fragment="content" th:remove="tag">
+        <div th:if="${errorMessage != null}">
+            <p th:text="${errorMessage}"></p>
+        </div>
         <div th:if=${#lists.isEmpty(locadoras)}>
+            <a th:href="@{/home}" th:text="#{voltar}"></a>
             <form th:action="@{/salvar}" method="post" th:object="${locacao}">
                 <label for="labelLocadora" th:text="#{locacao.cadastrar.locadora}"></label>
                 <p th:text="#{locacao.cadastrar.noLocadora}"></p>
@@ -23,6 +27,7 @@
             </form>
         </div>
         <div th:unless="${#lists.isEmpty(locadoras)}">
+            <a th:href="@{/home}" th:text="#{voltar}"></a>
             <form th:action="@{/locacoes/salvar}" method="post" th:object="${locacao}">
                     <div class="form-row">
                         <div class="form-group col-md-6">

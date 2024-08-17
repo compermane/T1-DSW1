@@ -7,7 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
 import br.ufscar.dc.dsw.security.UsuarioDetailsServiceImpl;
 // import br.ufscar.dc.dsw.security.LocadoraDetailsServiceImpl;
 
@@ -39,13 +42,15 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
-    // @Bean
-    // public DaoAuthenticationProvider locadoraAuthenticationProvider() {
-    //     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    //     authProvider.setUserDetailsService(locDetailsService());
-    //     authProvider.setPasswordEncoder(passwordEncoder());
-    //     return authProvider;
-    // }
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, authException) -> response.sendRedirect("/");
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> response.sendRedirect("/access-denied");
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -66,7 +71,12 @@ public class WebSecurityConfig {
             )
             .logout((logout) -> logout
                 .logoutSuccessUrl("/")
-                .permitAll());
+                .permitAll()
+            )
+            .exceptionHandling((exceptions) -> exceptions
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
+            );
 
         return http.build();
     }

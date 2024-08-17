@@ -21,4 +21,7 @@ public interface ILocadoraDAO extends CrudRepository<Locadora, Long>{
 
 	@Query("SELECT l FROM Locadora l WHERE l.cnpj = :cnpj")
 	public Locadora findByCnpj(@Param("cnpj") String cnpj);
+
+	@Query("SELECT l FROM Locadora l WHERE l.cidade = :cidade")
+	public List<Locadora> findByCidade(@Param("cidade") String cidade);
 }

@@ -26,13 +26,6 @@ public class LocadoraController {
 
     @PostMapping("/salvar")
     public String cadastrarLocadora(@Valid Locadora locadora, BindingResult result, RedirectAttributes attr) {
-        
-            // if (result.hasErrors()) {
-            //     System.out.println("ROLE: " + locadora.getRole());
-            //     System.out.println("[-] Erro durante inserção de locadora");
-            //     result.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
-            //     return "locadoras/signUp-locadora";
-            // }
         try {
             locadora.setRole("ROLE_LOCADORA");
             locadoraService.salvar(locadora);
@@ -42,7 +35,7 @@ public class LocadoraController {
             e.printStackTrace();
         }
         
-        attr.addFlashAttribute("sucess", "locadora.create.sucess");
+        attr.addFlashAttribute("sucessMessage", "locadora.create.sucess");
         return "redirect:/home";
     }
 
