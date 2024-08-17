@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	    xmlns:th="http://www.thymeleaf.org">
+	    xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{fragments/index_layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Locadora</title>
+    <title th:text="#{cliente.cadastrar.label}"></title>
     <link rel="stylesheet" href="teste.css">
 </head>
 <body>
+    <div layout:fragment="content" th:remove="tag">
     <h1 th:text="#{cliente.cadastrar.label}"></h1>
     <form 
         th:action="@{/clientes/salvar}" 
@@ -56,11 +58,11 @@
                 </div>
             </div>
             <div class="form-group col-md-6">
-                <label for="sexo" th:text="#{cliente.sexo.label}">Sexo</label>
+                <label for="sexo" th:text="#{cliente.sexo.label}"></label>
                 <select class="form-control" id="sexo" th:field="*{sexo}">
-                    <option value="" th:text="#{cliente.sexo.placeholder}">Selecione</option>
-                    <option value="M" th:text="#{cliente.sexo.masc}">Masculino</option>
-                    <option value="F" th:text="#{cliente.sexo.fem}">Feminino</option>
+                    <option value="" th:text="#{cliente.sexo.placeholder}"></option>
+                    <option value="M" th:text="#{cliente.sexo.masc}"></option>
+                    <option value="F" th:text="#{cliente.sexo.fem}"></option>
                 </select>
                 <div class="invalid-feedback">
                     <span th:errors="*{sexo}"></span>
@@ -90,8 +92,9 @@
 
         <input type="hidden" id="role" th:field="*{role}" th:value="'ROLE_CLIENTE'" />
         <input type="hidden" id="id" th:field="*{id}" />
-        <button type="submit" th:text="#{button.salvar.label}"
+        <button type="submit" th:text="#{button.cadastrar}"
             class="btn btn-primary btn-sm"></button>
     </form>
+    </div>
 </body>
 </html>

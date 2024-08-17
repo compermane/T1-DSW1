@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	    xmlns:th="http://www.thymeleaf.org">
+	    xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="~{fragments/index_layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Locadora</title>
+    <title th:text="#{cadastro.locadora}"></title>
     <link rel="stylesheet" href="teste.css">
 </head>
 <body>
-    <h1>Cadastro de Locadora</h1>
+    <div layout:fragment="content" th:remove="tag">
+    <h1 th:text="#{cadastro.locadora}"></h1>
     <form 
         th:action="@{/locadoras/salvar}" 
         th:object="${locadora}" method="post">
@@ -69,8 +71,9 @@
 
         <input type="hidden" id="role" th:field="*{role}" th:value="'ROLE_LOCADORA'" />
         <input type="hidden" id="id" th:field="*{id}" />
-        <button type="submit" th:text="#{button.salvar.label}"
+        <button type="submit" th:text="#{button.cadastrar}"
             class="btn btn-primary btn-sm"></button>
     </form>
+    </div>
 </body>
 </html>
