@@ -121,6 +121,14 @@ public class AdminController {
                 clienteUpdate.setPassword(password);
                 clienteUpdate.setDataNascimento(dataNascimento);
                 clienteUpdate.setIsAdmin(isAdmin);
+
+                if (isAdmin) {
+                    clienteUpdate.setRole("ROLE_ADMIN");
+                }
+                else {
+                    clienteUpdate.setRole("ROLE_CLIENTE");
+                }
+
                 clienteUpdate.setSexo(sexo);
 
                 try {
@@ -138,7 +146,6 @@ public class AdminController {
             
             case "delete":
                 System.out.println("[+] Passou por 'delete'");
-                System.out.println("id: " + clienteCommand.getId());
                 Long idDelete = Long.parseLong(clienteCommand.getId());
 
                 try {

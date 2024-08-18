@@ -25,11 +25,11 @@ public class Locacao extends AbstractEntity<Long> {
     private Time horario;
 
     @ManyToOne
-    @JoinColumn(name = "CPF", nullable = false, foreignKey = @ForeignKey(name = "FK_Locacao_Cliente"))
+    @JoinColumn(name = "id_cliente", nullable = false, foreignKey = @ForeignKey(name = "FK_Locacao_Cliente"))
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "CNPJ", nullable = false, foreignKey = @ForeignKey(name = "FK_Locacao_Locadora"))
+    @JoinColumn(name = "id_locadora", nullable = false, foreignKey = @ForeignKey(name = "FK_Locacao_Locadora"))
     private Locadora locadora;
 
 
