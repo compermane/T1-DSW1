@@ -6,13 +6,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
+// import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 import br.ufscar.dc.dsw.security.UsuarioDetailsServiceImpl;
-// import br.ufscar.dc.dsw.security.LocadoraDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -37,8 +34,8 @@ public class WebSecurityConfig {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
-		authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
-        // authProvider.setPasswordEncoder(passwordEncoder());
+		// authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
