@@ -10,6 +10,7 @@
 
 <body>
     <div class = "center-container" layout:fragment="content" th:remove="tag">
+        <div th:replace="~{fragments/alert}"></div>
         <div class = "form-container">
             <form class = "loginForm" method = "post" th:action = "@{/login}">
                 <h1 th:text="#{login.login}"></h1>
@@ -35,9 +36,9 @@
                     <option value = "" selected style = "background-color: gray;" th:text="#{index.select.cidade}"></option>
                     <option value = "Todas" th:text="#{index.select.todas}"></option>
                     <option th:each="locadora : ${listaTodasLocadoras}"
-                            th:value="${locadora.cidade}" 
-                            th:text="${locadora.cidade}"
-                            th:selected="${locadora.cidade == cidadeSelecionada}"></option>
+                            th:value="${locadora}" 
+                            th:text="${locadora}"
+                            th:selected="${locadora == cidadeSelecionada}"></option>
                 </select>
                 <input type="submit" th:value="#{index.listar}">
             </form>

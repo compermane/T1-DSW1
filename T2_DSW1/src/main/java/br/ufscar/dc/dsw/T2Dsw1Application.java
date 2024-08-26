@@ -99,7 +99,7 @@ public class T2Dsw1Application {
 
 
 			Locadora l4 = new Locadora();
-			l4.setUsername("locadora4@gmail.com");
+			l4.setUsername("locadora4@email.com");
 			l4.setPassword(encoder.encode("locadora"));
 			l4.setRole("ROLE_LOCADORA");
 			l4.setCnpj("44444444000110");
@@ -120,7 +120,7 @@ public class T2Dsw1Application {
 			locadoraDAO.save(l5);
 
 			Locadora l6 = new Locadora();
-			l6.setUsername("locadora6@gmail.com");
+			l6.setUsername("locadora6@email.com");
 			l6.setPassword(encoder.encode("locadora"));
 			l6.setRole("ROLE_LOCADORA");
 			l6.setCnpj("66666666000111");

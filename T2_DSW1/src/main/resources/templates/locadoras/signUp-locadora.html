@@ -10,6 +10,8 @@
 <body>
     <div layout:fragment="content" th:remove="tag">
     <h1 th:text="#{cadastro.locadora}"></h1>
+    <div th:replace="~{fragments/alert}"></div>
+    <a th:href="@{/}" th:text="#{voltar}"></a>
     <form class="box-shadow"
         th:action="@{/locadoras/salvar}" 
         th:object="${locadora}" method="post">

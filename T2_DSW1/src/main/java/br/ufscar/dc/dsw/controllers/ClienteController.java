@@ -33,11 +33,14 @@ public class ClienteController {
         }
         catch(Exception e) {
             System.out.println("[-] Erro ao cadastrar cliente: " + e.getMessage());
+            attr.addFlashAttribute("errorMessage", "cliente.error.create");
             e.printStackTrace();
+
+            return "redirect:/clientes/signUp-cliente";
         }
         
-        attr.addFlashAttribute("sucessMessage", "cliente.create.sucess");
-        return "redirect:/home";
+        attr.addFlashAttribute("sucessMessage", "cliente.success.create");
+        return "redirect:/";
     }
 
     @PostMapping("/editar")

@@ -32,11 +32,14 @@ public class LocadoraController {
         }
         catch(Exception e) {
             System.out.println("[-] Erro ao cadastrar locadora: " + e.getMessage());
+            attr.addFlashAttribute("errorMessage", "locadora.create.error");
             e.printStackTrace();
+
+            return "redirect:/locadoras/signUp-locadora";
         }
         
         attr.addFlashAttribute("sucessMessage", "locadora.create.sucess");
-        return "redirect:/home";
+        return "redirect:/";
     }
 
     @PostMapping("/editar")

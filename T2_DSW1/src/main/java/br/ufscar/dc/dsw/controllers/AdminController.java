@@ -60,7 +60,7 @@ public class AdminController {
     }
 
     @PostMapping("/handle-crud-cliente")
-    public String handleCrudCliente(@ModelAttribute("clienteCommand") ClienteCommand clienteCommand, Model model, RedirectAttributes redirectAttributes) {
+    public String handleCrudCliente(@ModelAttribute("clienteCommand") ClienteCommand clienteCommand, Model model, RedirectAttributes redirectAttributes) throws Exception{
         System.out.println("[+] Método handleCrudCliente de AdminController executado");
         String action = clienteCommand.getCrudAction();
         System.out.println("action: " + action);
@@ -78,7 +78,13 @@ public class AdminController {
                 cliente.setDataNascimento(clienteCommand.getDataNascimento());
                 cliente.setIsAdmin((clienteCommand.getIsAdmin().equals("true")) ? true : false);
                 cliente.setSexo(clienteCommand.getSexo());
-                cliente.setRole("ROLE_CLIENTE");
+
+                if(cliente.getIsAdmin()) {
+                    cliente.setRole("ROLE_ADMIN");
+                }
+                else {
+                    cliente.setRole("ROLE_CLIENTE");
+                }
 
                 try {
                     if(!validateCpf(cliente.getCpf())) {
@@ -103,6 +109,7 @@ public class AdminController {
             
             case "update":
                 Long id = Long.parseLong(clienteCommand.getId());
+
                 Cliente clienteUpdate = clienteService.buscarPorID(id);
 
                 String cpf = (clienteCommand.getCpf().equals("")) ? clienteUpdate.getCpf() : clienteCommand.getCpf();

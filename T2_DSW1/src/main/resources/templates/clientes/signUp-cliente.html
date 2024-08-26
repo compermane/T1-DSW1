@@ -10,6 +10,8 @@
 <body>
     <div layout:fragment="content" th:remove="tag">
     <h1 th:text="#{cliente.cadastrar.label}"></h1>
+    <div th:replace="~{fragments/alert}"></div>
+    <a th:href="@{/voltar}" th:text="#{voltar}"></a>
     <form class="box-shadow"
         th:action="@{/clientes/salvar}" 
         th:object="${cliente}" method="post">
