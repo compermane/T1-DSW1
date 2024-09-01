@@ -6,40 +6,45 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <fmt:bundle basename="messages">
     <meta charset="UTF-8">
-    <title>Cadastro de Cliente</title>
-    <link rel="stylesheet" href="teste.css">
+    <title><fmt:message key="cliente.cadastrar.label" /></title>
+    <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/index.css">
 </head>
 <body>
-    <h1>Cadastro de Cliente</h1>
-    <form action="${pageContext.request.contextPath}/signUp-cliente/insercao" method="post">
-        <h1> POR FAVOR, INSIRA OS SEGUINTES DADOS:</h1>
+    <div class="center-container">
+    <h1><fmt:message key="cliente.cadastrar.label" /></h1>
+        <div class="form-container">
+            <form action="${pageContext.request.contextPath}/signUp-cliente/insercao" method="post">
+                <label for="email"><fmt:message key="login.email" /></label>
+                <input class="registerInput" type="email" id="email" name="email" required><br>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
+                <label for="senha"><fmt:message key="usuario.password.label" /></label>
+                <input class="registerInput" type="password" id="senha" name="senha" required><br>
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required><br>
+                <label for="cpf"><fmt:message key="cliente.cpf.label" /></label>
+                <input class="registerInput" type="text" id="cpf" name="cpf" required><br>
 
-        <label for="cpf">CPF:</label>
-        <input type="text" id="cpf" name="cpf" required><br>
+                <label for="nome"><fmt:message key="cliente.home.nome" /></label>
+                <input class="registerInput" type="text" id="nome" name="nome" required><br>
 
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required><br>
+                <label for="telefone"><fmt:message key="cliente.telefone.label" /></label>
+                <input class="registerInput" type="text" id="telefone" name="telefone" required><br>
 
-        <label for="telefone">Telefone:</label>
-        <input type="text" id="telefone" name="telefone" required><br>
+                <label for="sexo"><fmt:message key="cliente.sexo.label" /></label>
+                <select id="sexo" name="sexo" required>
+                    <option value=""><fmt:message key="cliente.sexo.placeholder" /></option>
+                    <option value="M"><fmt:message key="cliente.sexo.masc" /></option>
+                    <option value="F"><fmt:message key="cliente.sexo.fem" /></option>
+                </select>
 
-        <label for="sexo">Sexo:</label>
-        <select id="sexo" name="sexo" required>
-            <option value="M">Masculino</option>
-            <option value="F">Feminino</option>
-        </select>
+                <label for="dataNascimento"><fmt:message key="cliente.dataNascimento.label" /></label>
+                <input class="registerInput" type="date" id="dataNascimento" name="dataNascimento" required><br>
 
-        <label for="dataNascimento">Data de Nascimento:</label>
-        <input type="date" id="dataNascimento" name="dataNascimento" required><br>
-
-        <input type="submit" value="Cadastrar">
-    </form>
+                <button type="submit" value="Cadastrar"><fmt:message key="sidebar.link.cadastrar" />
+            </form>
+        </div>
+    </div>
 </body>
+</fmt:bundle>
 </html>

@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.ufscar.dc.dsw.dao.ClienteDAO;
+import br.ufscar.dc.dsw.dao.LocadoraDAO;
 import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.domain.Cliente;
+import br.ufscar.dc.dsw.domain.Locadora;
 import br.ufscar.dc.dsw.errors.Erro;
 
 @WebServlet(urlPatterns = {"/admin/*", "/admin/locadoras/*", "/admin/clientes/*"})
@@ -63,6 +65,16 @@ public class AdminController extends HttpServlet {
 
 		List<Cliente> listaClientes = new ClienteDAO().getAll();
     	request.getSession().setAttribute("listaClientes", listaClientes);
+
+		request.setAttribute("mensagens", erros);
+	}
+
+	public void getLocadoras(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método getLocadoras de AdminController executado");
+		Erro erros = new Erro();
+
+		List<Locadora> listaLocadoras= new LocadoraDAO().getAll();
+    	request.getSession().setAttribute("listaLocadoras", listaLocadoras);
 
 		request.setAttribute("mensagens", erros);
 	}

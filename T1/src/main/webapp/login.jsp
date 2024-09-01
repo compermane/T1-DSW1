@@ -6,49 +6,49 @@
 <!DOCTYPE html>
 
 <html>
-
-<head>
-    <title>Locadora de Bicicletas - Login</title>
-</head>
-
+    <fmt:bundle basename="messages">    
+    <head>
+        <title><fmt:message key="login.login" /></title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+    </head>
 <body>
-    <c:if test="${not empty errorMessage}">
-        <div class="erro">
-            <c:forEach var="erro" items="${errorMessage}">
-                <h3>${erro}</h3>
-            </c:forEach>
-        </div>
-    </c:if>
-
     <div class = "center-container">
+        <c:if test="${not empty errorMessage}">
+            <div class="erro">
+                <c:forEach var="erro" items="${errorMessage}">
+                    <h3>${erro}</h3>
+                </c:forEach>
+            </div>
+        </c:if>
+    
         <div class = "form-container">
         <form class = "loginForm" method = "post" action = "/DSW1_T1/loginController/login">
-            <h1>Login</h1>
+            <h1><fmt:message key="login.login" /></h1>
             <div class = "loginInput">
-                <label>Email</label>
+                <label><fmt:message key="login.email" /></label>
                 <input type="email" name = "email"/>
             </div>
             <div class = "loginInput">
-            <label>Senha</label>
+            <label><fmt:message key="login.senha" /></label>
             <input type="password" name = "senha" />
             </div>
             <div class = "form-footer">
-            <button type="submit">Login</button>
-            <span>Não tem uma conta? Cadastre-se<a href="${pageContext.request.contextPath}/signUp-locadora"> como uma locadora</a> 
-                ou <a href="${pageContext.request.contextPath}/signUp-cliente">como um cliente</a></span>
+            <button type="submit"><fmt:message key="login.login" /></button>
+            <span><fmt:message key="no.account.log" /><a href="${pageContext.request.contextPath}/signUp-locadora"><fmt:message key="as.locadora" /></a>
+                <a href="${pageContext.request.contextPath}/signUp-cliente"><fmt:message key="as.cliente" /></a></span>
             </div>
         </form>
 
-        <h2 id = "listaLocadorasTitulo">Lista de Locadoras</h2>
+        <h2 id = "listaLocadorasTitulo"><fmt:message key="index.locadora.list" /></h2>
         <select name = "selectCidade" id = "selectCidade">
-            <option value = "vazio" selected style = "background-color: gray;">Selecionar cidade</option>
+            <option value = "vazio" selected style = "background-color: gray;"><fmt:message key="index.locadora.list" /></option>
             <!-- TODO: Adicionar cidades do banco como seleção -->
         </select>
         <div id = "locadorasTableContainer">
             <table id="locadorasTable">
                 <tr>
-                    <th>Nome</th>
-                    <th>Cidade</th>
+                    <th><fmt:message key="index.nome.locadora" /></th>
+                    <th><fmt:message key="index.cidade.locadora" /></th>
                 </tr>
                 <c:forEach var="locadora" items="${sessionScope.listaLocadoras}">
                     <tr>
@@ -109,4 +109,5 @@
     }
 </script>
 </body>
+</fmt:bundle>
 </html>

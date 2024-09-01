@@ -5,90 +5,98 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+<fmt:bundle basename="messages">
 <head>
     <meta charset="UTF-8">
-    <title>CRUD de Clientes</title>
-    <link rel="stylesheet" type="text/css" href="teste.css">
+    <title><fmt:message key="admin.crud.cliente" /></title>
+    <!-- <link rel="stylesheet" type="text/css" href="teste.css"> -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 </head>
 <body>
-    <div class="container">
-        <nav>
+    <div class="center-container" style="margin-top: 10vh; margin-left: 10vw; width: 80%;">
+        <div class="box-shadow">
+            <c:if test="${not empty mensagemErro}">
+                <div class="erro">
+                    <c:forEach var="erro" items="${mensagemErro}">
+                        <h3><fmt:message key="${erro}" /></h3>
+                    </c:forEach>
+                </div>
+            </c:if>
+            <c:if test="${not empty mensagemSucesso}">
+                <div class="erro">
+                    <c:forEach var="erro" items="${mensagemSucesso}">
+                        <h3><fmt:message key="${erro}" /></h3>
+                    </c:forEach>
+                </div>
+            </c:if>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
-                <li><a href="${pageContext.request.contextPath}/cadastrarLocacao">Cadastrar locação</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/cliente">CRUD de Clientes</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/locadora">CRUD de Locadoras</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/cliente"><fmt:message key="admin.crud.cliente" /></a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/locadora"><fmt:message key="admin.crud.locadora" /></a></li>
             </ul>
-        </nav>
-        <main>
-            <h2>Bem-vindo ao Sistema de Locação de Bicicletas</h2>
-            <p>Utilize os links acima para navegar pelas funcionalidades do sistema.</p>
             <div id = "clienteTableContainer">
                 <table id="clienteTable">
                     <tr>
                         <th>ID</th>
-                        <th>Email</th>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>Telefone</th>
-                        <th>Sexo</th>
-                        <th>Data de Nascimento</th>
+                        <th><fmt:message key="admin.crud.email" /></th>
+                        <th><fmt:message key="admin.crud.nome" /></th>
+                        <th><fmt:message key="admin.crud.cpf" /></th>
+                        <th><fmt:message key="admin.crud.telefone" /></th>
+                        <th><fmt:message key="admin.crud.sexo" /></th>
+                        <th><fmt:message key="admin.crud.dataNascimento" /></th>
                     </tr>
-
                     <c:forEach var="locacao" items="${sessionScope.listaClientes}">
-                        <tr>
-                            <td>${locacao.id}</td>
-                            <td>${locacao.email}</td>
-                            <td>${locacao.nome}</td>
-                            <td>${locacao.documento}</td>
-                            <td>${locacao.telefone}</td>
-                            <td>${locacao.sexo}</td>
-                            <td>${locacao.dataNascimento}</td>
-                        </tr>
+                    <tr>
+                        <td>${locacao.id}</td>
+                        <td>${locacao.email}</td>
+                        <td>${locacao.nome}</td>
+                        <td>${locacao.documento}</td>
+                        <td>${locacao.telefone}</td>
+                        <td>${locacao.sexo}</td>
+                        <td>${locacao.dataNascimento}</td>
+                    </tr>
                     </c:forEach>
                 </table>
             </div>
             <form class="crud" action="${pageContext.request.contextPath}/crud-cliente/handle-crud" method="post">
                 <select name="crudSelectAction" required>
-                    <option value="">Selecione a ação</option>
-                    <option value="create">Criar</option>
-                    <option value="update">Atualizar</option>
-                    <option value="delete">Deletar</option>
+                    <option value=""><fmt:message key="admin.crud.selectAction" /></option>
+                    <option value="create"><fmt:message key="admin.crud.create" /></option>
+                    <option value="update"><fmt:message key="admin.crud.update" /></option>
+                    <option value="delete"><fmt:message key="admin.crud.delete" /></option>
                 </select>
                 <select name="crudSelectId">
-                    <option value="">Selecione o ID do usuário</option>
+                    <option value=""><fmt:message key="admin.crud.selectID" /></option>
                     <c:forEach items="${listaClientes}" var="cliente">
                         <option value="${cliente.id}">${cliente.id}</option>
                     </c:forEach>
                 </select>
-                <label for="emailCrud">Email</label>
+                <label for="emailCrud"><fmt:message key="admin.crud.email" /></label>
                 <input type="email" name="emailCrud">
-                <label for="senhaCrud">Senha</label>
+                <label for="senhaCrud"><fmt:message key="admin.crud.senha" /></label>
                 <input type="password" name="senhaCrud">
-                <label for="nomeCrud">Nome</label>
+                <label for="nomeCrud"><fmt:message key="admin.crud.nome" /></label>
                 <input type="text" name="nomeCrud">
-                <label for="documentoCrud">CPF</label>
+                <label for="documentoCrud"><fmt:message key="admin.crud.cpf" /></label>
                 <input type="text" name="documentoCrud">
-                <label for="telefoneCrud">Telefone</label>
+                <label for="telefoneCrud"><fmt:message key="admin.crud.telefone" /></label>
                 <input type="text" name="telefoneCrud">
                 <select name="sexoCrud">
-                    <option value="">Selecione um sexo</option>
-                    <option value="M">M</option>
-                    <option value="F">F</option>
+                    <option value=""><fmt:message key="admin.crud.selectSexo" /></option>
+                    <option value="M"><fmt:message key="cliente.sexo.masc" /></option>
+                    <option value="F"><fmt:message key="cliente.sexo.fem" /></option>
                 </select>
-                <label for="dataNascimentoCrud">Data de Nascimento</label>
+                <label for="dataNascimentoCrud"><fmt:message key="admin.crud.dataNascimento" /></label>
                 <input type="date" name="dataNascimentoCrud" value="0001-01-01">
                 <select name="isAdminCrud">
-                    <option value="">É admin?</option>
-                    <option value="true">Sim</option>
-                    <option value="false">Não</option>
+                    <option value=""><fmt:message key="admin.crud.isAdmin" /></option>
+                    <option value="true"><fmt:message key="admin.crud.yes" /></option>
+                    <option value="false"><fmt:message key="admin.crud.no" /></option>
                 </select>
-                <input type="submit" name="action" value="Executar">
+                <button type="submit" name="action" value="Executar"><fmt:message key="admin.crud.execute"></fmt:message>
             </form>
-        </main>
-        <footer>
-            <p>&copy; 2024 Sistema de Locação de Bicicletas</p>
-        </footer>
+        </div>
     </div>
 </body>
+</fmt:bundle>
 </html>

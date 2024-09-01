@@ -12,7 +12,7 @@ import br.ufscar.dc.dsw.dao.UsuarioDAO;
 import br.ufscar.dc.dsw.domain.Usuario;
 import br.ufscar.dc.dsw.domain.Locadora;
 
-@WebServlet(urlPatterns = { "/locadoras/*" })
+@WebServlet(urlPatterns = { "/crud-locadora/*" })
 public class LocadoraController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -65,23 +65,21 @@ public class LocadoraController extends HttpServlet {
 
 		try {
             if (daoUsuario.getUserByEmail(email) != null) {
-                String mensagemErro = "O email já está em uso.";
+                String mensagemErro = "error.email.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
-                System.out.println("PASSOU A1UI 1");
-                RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/admin/clientes");
-                dispatcher.forward(request, response);
+
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/locadoras.jsp");
+				dispatcher.forward(request, response);
                 return;
             }
 
             // Verificar se o CNPJ já existe
             if (daoLocadora.getLocadoraByCNPJ(cnpj) != null) {
-                String mensagemErro = "O CNPJ já está em uso.";
+                String mensagemErro = "error.cnpj.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
-                System.out.println("PASSOU A1UI 2");
 
-                RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/admin/clientes");
-                dispatcher.forward(request, response);
-
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/locadoras.jsp");
+				dispatcher.forward(request, response);
                 return;
             }
 
@@ -94,7 +92,11 @@ public class LocadoraController extends HttpServlet {
 
             System.out.println("\nLocadora inserido com sucesso.\n");
             
-            response.sendRedirect(request.getContextPath() + "/admin/locadoras");
+            String mensagemSucesso = "locadora.create.success";
+            request.setAttribute("mensagemSucesso", mensagemSucesso);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/locadoras.jsp");
+            dispatcher.forward(request, response);
 		}
 		catch(RuntimeException | IOException e) {
             throw new ServletException(e);
@@ -104,11 +106,6 @@ public class LocadoraController extends HttpServlet {
     private void handleUpdateLocadora(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("[+] Método handleUpdateLocadora de LocadoraController executado");
         request.setCharacterEncoding("UTF-8");
-		
-		if(request.getParameter("crudSelectId") == "") {
-			request.setAttribute("mensagemErro", "Selecione um ID de locadora");
-			return;
-		}
 		
 		int idLocadora = Integer.parseInt(request.getParameter("crudSelectId"));
         try {
@@ -120,12 +117,12 @@ public class LocadoraController extends HttpServlet {
             if(locadoraSelecionada != null) {
                 // Verificar se o email já existe
                 if(daoUsuario.getUserByEmail(email) != null && !daoUsuario.getUserByEmail(email).getEmail().equals(locadoraSelecionada.getEmail())) {
-                    String mensagemErro = "O email já está em uso.";
+                    String mensagemErro = "error.email.already.inuse";
                     request.setAttribute("mensagemErro", mensagemErro);
                 }
                 // Verificar se o CNPJ já existe
                 if(daoLocadora.getLocadoraByCNPJ(cnpj) != null && !daoLocadora.getLocadoraByCNPJ(cnpj).getDocumento().equals(locadoraSelecionada.getDocumento())) {
-                    String mensagemErro = "O CPF já está em uso.";
+                    String mensagemErro = "error.cnpj.already.inuse";
                     request.setAttribute("mensagemErro", mensagemErro);
                 }             
             }
@@ -163,20 +160,23 @@ public class LocadoraController extends HttpServlet {
             daoUsuario.updateUser(locadoraSelecionada);
             daoLocadora.updateLocadora(locadoraSelecionada);
 
-            response.sendRedirect(request.getContextPath() + "/admin/locadoras");
+            String mensagemSucesso = "locadora.update.success";
+            request.setAttribute("mensagemSucesso", mensagemSucesso);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/locadoras.jsp");
+            dispatcher.forward(request, response);
         } catch (RuntimeException | IOException e) {
             throw new ServletException(e);
         }
     }
     private void handleDeleteLocadora(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("[+] Método handleDeleteLocadora de LocadoraController executado");
-		if(request.getParameter("crudSelectId") == "") {
-			String mensagemErro = "Selecione um id de locadora.";
-			request.setAttribute("mensagemErro", mensagemErro);
-		}
+
 		int idLocadora = Integer.parseInt(request.getParameter("crudSelectId"));
 		daoUsuario.deleteUser(daoLocadora.getLocadoraByID(idLocadora));
 
-		response.sendRedirect("/clientes.jsp");
+        request.setAttribute("mensagemSucesso", "locadora.delete.success");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/locadoras.jsp");
+        dispatcher.forward(request, response);
     }
 }

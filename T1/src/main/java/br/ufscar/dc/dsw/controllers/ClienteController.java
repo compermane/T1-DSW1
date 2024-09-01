@@ -81,18 +81,20 @@ public class ClienteController extends HttpServlet {
 
 		try {
             if (daoUsuario.getUserByEmail(email) != null) {
-                String mensagemErro = "O email já está em uso.";
+                String mensagemErro = "error.email.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
-                RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/admin/clientes");
-                dispatcher.forward(request, response);
+
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
+				dispatcher.forward(request, response);
+
                 return;
             }
 
             if (daoCliente.getClienteByCPF(cpf) != null) {
-                String mensagemErro = "O CPF já está em uso.";
+                String mensagemErro = "error.cpf.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
 
-                RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + "/admin/clientes");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
@@ -105,8 +107,12 @@ public class ClienteController extends HttpServlet {
             daoCliente.insertCliente(cliente);
 
             System.out.println("\nCliente inserido com sucesso.\n");
-            
-            response.sendRedirect(request.getContextPath() + "/admin/clientes");
+
+            String mensagemSucesso = "cliente.success.create";
+			request.setAttribute("mensagemSucesso", mensagemSucesso);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
+			dispatcher.forward(request, response);
 		}
 		catch(RuntimeException | IOException e) {
             throw new ServletException(e);
@@ -134,12 +140,18 @@ public class ClienteController extends HttpServlet {
 
             if(clienteSelecionado != null) {
                 if(daoUsuario.getUserByEmail(email) != null && !daoUsuario.getUserByEmail(email).getEmail().equals(clienteSelecionado.getEmail())) {
-                    String mensagemErro = "O email já está em uso.";
+                    String mensagemErro = "error.email.already.inuse";
                     request.setAttribute("mensagemErro", mensagemErro);
+
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
+					dispatcher.forward(request, response);
                 }
                 if(daoCliente.getClienteByCPF(cpf) != null && !daoCliente.getClienteByCPF(cpf).getDocumento().equals(clienteSelecionado.getDocumento())) {
-                    String mensagemErro = "O CPF já está em uso.";
+                    String mensagemErro = "error.cpf.already.inuse";
                     request.setAttribute("mensagemErro", mensagemErro);
+
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
+					dispatcher.forward(request, response);
                 }             
             }
 
@@ -166,14 +178,12 @@ public class ClienteController extends HttpServlet {
             boolean admin = false;
 
             if (administrador == null || administrador.equals("false")) {
-				System.out.println("PASSOU A1UI1");
                 admin = false;
             }
             else {
-				System.out.println("PASSOU AQUI 2");
                 admin = true;
             }
-			System.out.println("sdmin2: " + admin);
+
 			usuarioSelecionado.setAdmin(admin);
 			if(email != "") {
             	usuarioSelecionado.setEmail(email);
@@ -200,7 +210,13 @@ public class ClienteController extends HttpServlet {
             daoUsuario.updateUser(usuarioSelecionado);
             daoCliente.updateCliente(clienteSelecionado);
 
-            response.sendRedirect(request.getContextPath() + "/admin/clientes");
+			System.out.println("Cliente atualizado com sucesso.");
+
+			String mensagemSucesso = "cliente.success.update";
+			request.setAttribute("mensagemSucesso", mensagemSucesso);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
+			dispatcher.forward(request, response);
         } 
 		catch (RuntimeException | IOException | ParseException e) {
             throw new ServletException(e);
@@ -208,13 +224,13 @@ public class ClienteController extends HttpServlet {
     }
 
 	public void handleDeleteCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("crudSelectId") == "") {
-			String mensagemErro = "Selecione um id de cliente.";
-			request.setAttribute("mensagemErro", mensagemErro);
-		}
 		int idCliente = Integer.parseInt(request.getParameter("crudSelectId"));
 		daoUsuario.deleteUser(daoCliente.getClienteByID(idCliente));
 
-		response.sendRedirect("/clientes.jsp");
+		String mensagemSucesso = "cliente.success.delete";
+		request.setAttribute("mensagemSucesso", mensagemSucesso);
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
+		dispatcher.forward(request, response);
 	}
 }

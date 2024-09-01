@@ -79,6 +79,7 @@ public class LocacaoController extends HttpServlet {
     }
 
     public void alugar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // TODO: verificar por que tá dando pau
         request.setCharacterEncoding("UTF-8");
 
         try {
@@ -107,7 +108,7 @@ public class LocacaoController extends HttpServlet {
                 dispatcher.forward(request, response);
             }
             else {
-                request.setAttribute("erroLocacao", "Horário indisponível");
+                request.setAttribute("erroLocacao", "error.unavailable.time");
 
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/locacao_bicicleta.jsp");
                 dispatcher.forward(request, response);

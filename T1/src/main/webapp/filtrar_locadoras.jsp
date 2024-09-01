@@ -3,13 +3,12 @@
 <%@ page isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-
 <c:set var="minhaCidade" value="${param.cidadeSelecionada}" />
 <fmt:bundle basename="messages">
 <table id="locadorasTable" border="1">
     <tr>
-        <th><fmt:message key="nome" /></th>
-        <th><fmt:message key="cidade" /></th>
+        <th><fmt:message key="index.nome.locadora" /></th>
+        <th><fmt:message key="index.cidade.locadora" /></th>
     </tr>
     <c:choose>
         <c:when test="${minhaCidade != 'vazio'}">

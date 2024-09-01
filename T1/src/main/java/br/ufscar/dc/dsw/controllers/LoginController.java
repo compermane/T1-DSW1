@@ -52,7 +52,7 @@ public class LoginController extends HttpServlet {
 			}
 		} 
 		else {
-			request.setAttribute("errorMessage", "usuario_nao_reconhecido");
+			request.setAttribute("errorMessage", "usuario_ou_senha_invalidos");
 		}
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);

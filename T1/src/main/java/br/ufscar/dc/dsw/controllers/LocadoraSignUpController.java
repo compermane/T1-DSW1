@@ -81,8 +81,9 @@ public class LocadoraSignUpController extends HttpServlet {
 
             // Verificar se o email já existe
             if(daoUsuario.getUserByEmail(email) != null) {
-                String mensagemErro = "O email já está em uso.";
+                String mensagemErro = "error.email.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
+                
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_locadora.jsp");
                 dispatcher.forward(request, response);
                 return;
@@ -91,8 +92,9 @@ public class LocadoraSignUpController extends HttpServlet {
             String cnpj = request.getParameter("cnpj");
 
             if(daoLocadora.getLocadoraByCNPJ(cnpj) != null) {
-                String mensagemErro = "O CNPJ já está em uso.";
+                String mensagemErro = "error.cnpj.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
+
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_locadora.jsp");
                 dispatcher.forward(request, response);
 

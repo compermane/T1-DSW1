@@ -31,13 +31,19 @@ public class HomeController extends HttpServlet {
             List<Locacao> listaLocacoes = new LocacaoDAO().getAll(usuario.getId());
             request.getSession().setAttribute("listaLocacoes", listaLocacoes);
 
+            // TODO: implementar forma para locadora acessar as locações
+            
             // Encaminhar para a página inicial
             if(usuario.getAdmin()) {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/tela_inicial.jsp");
                 dispatcher.forward(request, response);  
             }
-            else {
+            else if(!usuario.getIsLocadora()){
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/home/cliente/tela_inicial.jsp");
+                dispatcher.forward(request, response);
+            }
+            else {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/home/locadora/tela_inicial.jsp");
                 dispatcher.forward(request, response);
             }
         } 

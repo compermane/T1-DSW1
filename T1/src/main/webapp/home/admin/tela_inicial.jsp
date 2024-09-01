@@ -5,51 +5,25 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+<fmt:bundle basename="messages">
 <head>
     <meta charset="UTF-8">
-    <title>Página Inicial - Sistema de Locação de Bicicletas</title>
+    <title><fmt:message key="sistema.locacao.bicicletas" /></title>
     <link rel="stylesheet" type="text/css" href="teste.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Sistema de Locação de Bicicletas</h1>
-            <h2>Bem vindo <%= request.getAttribute("nomeUsuario") %></h2>
-        </header>
-        <nav>
+    <div class="center-container">
+        <div class="box-shadow">
+            <h1><fmt:message key="sistema.locacao.bicicletas" /></h1>
+            <h2><fmt:message key="usuario.home.welcome" /> <%= request.getAttribute("nomeUsuario") %>!</h2>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
-                <li><a href="${pageContext.request.contextPath}/cadastrarLocacao">Cadastrar locação</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/clientes">CRUD de Clientes</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/locadoras">CRUD de Locadoras</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/clientes"><fmt:message key="crud.cliente.title" /></a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/locadoras"><fmt:message key="crud.locadora.title" /></a></li>
             </ul>
-        </nav>
-        <main>
-            <h2>Bem-vindo ao Sistema de Locação de Bicicletas</h2>
-            <p>Utilize os links acima para navegar pelas funcionalidades do sistema.</p>
-            <div id = "locacoesTableContainer">
-                <table id="locacoesTable">
-                    <tr>
-                        <th>Nome</th>
-                        <th>Cidade</th>
-                        <th>Dia</th>
-                        <th>Horário</th>
-                    </tr>
-
-                    <c:forEach var="locacao" items="${sessionScope.listaLocacoes}">
-                        <tr>
-                            <td>${locacao.locadora.nome}</td>
-                            <td>${locacao.locadora.cidade}</td>
-                            <td>${locacao.dia}</td>
-                            <td>${locacao.horario}</td>
-                        </tr>
-                    </c:forEach>
-                </table>
-            </div>
-        </main>
-        <footer>
-            <p>&copy; 2024 Sistema de Locação de Bicicletas</p>
-        </footer>
+        </div>
     </div>
 </body>
+</fmt:bundle>
 </html>

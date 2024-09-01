@@ -5,83 +5,84 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+<fmt:bundle basename="messages">
 <head>
     <meta charset="UTF-8">
-    <title>CRUD de Clientes</title>
+    <title><fmt:message key="admin.crud.locadora" /></title>
     <link rel="stylesheet" type="text/css" href="teste.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
 </head>
 <body>
-    <div class="container">
-        <nav>
+    <div class="center-container" style="margin-top: 10vh; margin-left: 10vw; width: 80%;">
+        <div class="box-shadow">
+            <c:if test="${not empty mensagemErro}">
+                <div class="erro">
+                    <c:forEach var="erro" items="${mensagemErro}">
+                        <h3><fmt:message key="${erro}" /></h3>
+                    </c:forEach>
+                </div>
+            </c:if>
+            <c:if test="${not empty mensagemSucesso}">
+                <div class="erro">
+                    <c:forEach var="erro" items="${mensagemSucesso}">
+                        <h3><fmt:message key="${erro}" /></h3>
+                    </c:forEach>
+                </div>
+            </c:if>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
-                <li><a href="${pageContext.request.contextPath}/cadastrarLocacao">Cadastrar locação</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/cliente">CRUD de Clientes</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/locadora">CRUD de Locadoras</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/cliente"><fmt:message key="admin.crud.cliente" /></a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/locadora"><fmt:message key="admin.crud.locadora" /></a></li>
             </ul>
-        </nav>
-        <main>
-            <h2>Bem-vindo ao Sistema de Locação de Bicicletas</h2>
-            <p>Utilize os links acima para navegar pelas funcionalidades do sistema.</p>
             <div id = "clienteTableContainer">
                 <table id="clienteTable">
                     <tr>
                         <th>ID</th>
-                        <th>Email</th>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>Telefone</th>
-                        <th>Sexo</th>
-                        <th>Data de Nascimento</th>
+                        <th><fmt:message key="admin.crud.email" /></th>
+                        <th><fmt:message key="admin.crud.nome" /></th>
+                        <th>CNPJ</th>
+                        <th><fmt:message key="admin.crud.cidade" /></th>
                     </tr>
 
-                    <c:forEach var="locacao" items="${sessionScope.listaClientes}">
+                    <c:forEach var="locadora" items="${sessionScope.listaLocadoras}">
                         <tr>
-                            <td>${locacao.id}</td>
-                            <td>${locacao.email}</td>
-                            <td>${locacao.nome}</td>
-                            <td>${locacao.documento}</td>
-                            <td>${locacao.telefone}</td>
-                            <td>${locacao.sexo}</td>
-                            <td>${locacao.dataNascimento}</td>
+                            <td>${locadora.id}</td>
+                            <td>${locadora.email}</td>
+                            <td>${locadora.nome}</td>
+                            <td>${locadora.documento}</td>
+                            <td>${locadora.cidade}</td>
                         </tr>
                     </c:forEach>
                 </table>
             </div>
-            <form class="crud" action="${pageContext.request.contextPath}/crud-cliente/handle-crud" method="post">
+            <form class="crud" action="${pageContext.request.contextPath}/crud-locadora/handle-crud" method="post">
                 <select name="crudSelectAction" required>
-                    <option value="">Selecione a ação</option>
-                    <option value="create">Criar</option>
-                    <option value="update">Atualizar</option>
-                    <option value="delete">Deletar</option>
+                    <option value=""><fmt:message key="admin.crud.selectAction" /></option>
+                    <option value="create"><fmt:message key="admin.crud.create" /></option>
+                    <option value="update"><fmt:message key="admin.crud.update" /></option>
+                    <option value="delete"><fmt:message key="admin.crud.delete" /></option>
                 </select>
                 <select name="crudSelectId">
-                    <option value="">Selecione o ID da locadora</option>
+                    <option value=""><fmt:message key="admin.crud.selectID" /></option>
                     <c:forEach items="${listaLocadoras}" var="locadora">
                         <option value="${locadora.id}">${locadora.id}</option>
                     </c:forEach>
                 </select>
                 <label for="emailCrud">Email</label>
                 <input type="email" name="emailCrud">
-                <label for="senhaCrud">Senha</label>
+                <label for="senhaCrud"><fmt:message key="admin.crud.senha" /></label>
                 <input type="password" name="senhaCrud">
-                <label for="nomeCrud">Nome</label>
+                <label for="nomeCrud"><fmt:message key="admin.crud.nome" /></label>
                 <input type="text" name="nomeCrud">
                 <label for="documentoCrud">CNPJ</label>
                 <input type="text" name="documentoCrud">
-                <label for="cidadeCrud">Cidade</label>
-                <input type="text" name="telefoneCrud">
-                <select name="isAdminCrud">
-                    <option value="">É admin?</option>
-                    <option value="true">Sim</option>
-                    <option value="false">Não</option>
-                </select>
-                <input type="submit" name="action" value="Executar">
+                <label for="cidadeCrud"><fmt:message key="admin.crud.cidade" /></label>
+                <input type="text" name="cidadeCrud">
+
+                <button type="submit" name="action" value="Executar"><fmt:message key="admin.crud.execute"></fmt:message>
             </form>
-        </main>
-        <footer>
-            <p>&copy; 2024 Sistema de Locação de Bicicletas</p>
-        </footer>
+        </div>
     </div>
 </body>
+</fmt:bundle>
 </html>
