@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -111,6 +112,7 @@ public class ClienteController extends HttpServlet {
             String mensagemSucesso = "cliente.success.create";
 			request.setAttribute("mensagemSucesso", mensagemSucesso);
 
+			getClientes(request, response);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -215,6 +217,7 @@ public class ClienteController extends HttpServlet {
 			String mensagemSucesso = "cliente.success.update";
 			request.setAttribute("mensagemSucesso", mensagemSucesso);
 
+			getClientes(request, response);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
 			dispatcher.forward(request, response);
         } 
@@ -230,7 +233,16 @@ public class ClienteController extends HttpServlet {
 		String mensagemSucesso = "cliente.success.delete";
 		request.setAttribute("mensagemSucesso", mensagemSucesso);
 
+		getClientes(request, response);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/cruds/clientes.jsp");
 		dispatcher.forward(request, response);
+	}
+
+	public void getClientes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("[+] Método getClientes de AdminController executado");
+
+		List<Cliente> listaClientes = new ClienteDAO().getAll();
+    	request.getSession().setAttribute("listaClientes", listaClientes);
+
 	}
 }

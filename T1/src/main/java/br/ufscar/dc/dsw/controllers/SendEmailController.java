@@ -52,8 +52,8 @@ public class SendEmailController extends HttpServlet {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
         Locadora locadora = (Locadora) request.getAttribute("locadoraParaEmail");
 
-        Date dataLocacao = (Date) request.getSession().getAttribute("dataLocacao");
-        String horarioLocacao = (String) request.getSession().getAttribute("horarioLocacao");
+        System.out.println("BRUHHHHHHHHHHHHHHHHHHHH" + locadora.getEmail());
+
         String toEmails = usuario.getEmail() + ", " + locadora.getEmail();
         
         final Message mensagem = new MimeMessage(sessao);
@@ -63,7 +63,7 @@ public class SendEmailController extends HttpServlet {
             mensagem.setSubject("Locação de Bicicleta Realizada");
             mensagem.setText("Nome do cliente: " + usuario.getNome() + "\nEmail do cliente: " + usuario.getEmail()
                     + "\n\nNome da locadora: " + locadora.getNome() + "\nEmail da locadora: " + locadora.getEmail()
-                    + "\n\nData da locação: " + dataLocacao + "\nHorário da locação: " + horarioLocacao + "\n\n");
+                    + "\n\nData da locação: " + request.getAttribute("dataLocacao") + "\nHorário da locação: " + request.getAttribute("horarioLocacao") + "\n\n");
             Transport.send(mensagem);
         } 
         catch (MessagingException e) {

@@ -79,10 +79,10 @@ public class LocacaoController extends HttpServlet {
     }
 
     public void alugar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO: verificar por que tá dando pau
         request.setCharacterEncoding("UTF-8");
 
         try {
+            System.out.println(request.getAttribute("dataLocacao"));
             SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date data_sem_formatar = reFormat.parse(request.getParameter("dataLocacao"));
             java.sql.Date dataLocacao = new java.sql.Date(data_sem_formatar.getTime());
@@ -92,6 +92,8 @@ public class LocacaoController extends HttpServlet {
             java.util.Date horario_sem_formatar = timeFormat.parse(horarioString);
             java.sql.Time horario = new java.sql.Time(horario_sem_formatar.getTime());
             
+            System.out.println("horario: " + horarioString);
+            System.out.println("data: " + data_sem_formatar);
             Locadora locadora = daoLocadora.getLocadoraByCNPJ(request.getParameter("locadoraSelect"));
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
             Locacao locacao = new Locacao(daoCliente.getClienteByID(usuario.getId()), locadora, dataLocacao, horario);
@@ -99,17 +101,19 @@ public class LocacaoController extends HttpServlet {
             if (!daoLocacao.existeLocacao(locadora.getCidade(), dataLocacao, horario)) {
                 daoLocacao.insertLocacao(locacao);
 
+                System.out.println("locadora email: " + locadora.getEmail());
                 request.setAttribute("erroLocacao", "");
                 request.setAttribute("locadoraParaEmail", locadora);
-                request.setAttribute("diaLocacao", data_sem_formatar);
-                request.setAttribute("horarioLocacao", horarioString);
+                request.setAttribute("locadoraEmail", locadora.getEmail());
+                request.setAttribute("dataLocacao", request.getParameter("dataLocacao"));
+                request.setAttribute("horarioLocacao", request.getParameter("horario"));
 
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/SendEmail");
                 dispatcher.forward(request, response);
             }
             else {
                 request.setAttribute("erroLocacao", "error.unavailable.time");
-
+                getLocacoes(request, response);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/locacao_bicicleta.jsp");
                 dispatcher.forward(request, response);
             }

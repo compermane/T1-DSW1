@@ -112,6 +112,7 @@ public class UsuarioDAO extends GeralDAO {
     }
 
     public Usuario getUserByEmail(String email) {
+        System.out.println("email: " + email);
         Usuario user = null;
         String sqlQuery = "SELECT * FROM Usuario WHERE email = ?;";
 

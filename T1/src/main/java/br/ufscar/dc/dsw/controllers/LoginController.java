@@ -40,6 +40,7 @@ public class LoginController extends HttpServlet {
 		Usuario usuario = dao.getUserByEmail(email);
 
 		if(usuario != null) {
+			System.out.println("BRUH");
 			if(usuario.getPassword().equals(senha)) {
 				request.getSession().setAttribute("usuarioLogado", usuario);
 

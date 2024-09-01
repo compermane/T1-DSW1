@@ -45,7 +45,7 @@ public class LocadoraDAO extends GeralDAO {
 
     public Locadora getLocadoraByCNPJ(String CNPJ) {
         Locadora locadora = null;
-        String sql = "SELECT * FROM Locadora lo WHERE CNPJ = ?;";
+        String sql = "SELECT l.id_locadora, u.nome, u.senha, u.email, l.CNPJ, l.cidade, u.isAdmin, u.isLocadora FROM Locadora l JOIN Usuario u ON l.CNPJ = u.documento WHERE l.CNPJ = ?;";
 
         try {
             Connection conn = this.getConnection();
@@ -56,14 +56,14 @@ public class LocadoraDAO extends GeralDAO {
 
             if (resultSet.next()) {
                 int id = resultSet.getInt("id_locadora");
-                // String email = resultSet.getString("email");
-                // String senha = resultSet.getString("senha");
-                // String nome = resultSet.getString("nome");
-                // boolean admin = resultSet.getBoolean("isAdmin");
-                // boolean isLocadora = resultSet.getBoolean("isLocadora");
+                String email = resultSet.getString("email");
+                String senha = resultSet.getString("senha");
+                String nome = resultSet.getString("nome");
+                boolean admin = resultSet.getBoolean("isAdmin");
+                boolean isLocadora = resultSet.getBoolean("isLocadora");
                 String cidade = resultSet.getString("cidade");
 
-                locadora = new Locadora(id, CNPJ, cidade);
+                locadora = new Locadora(id, CNPJ, email, senha, nome, admin, isLocadora, cidade);
             }
 
             resultSet.close();

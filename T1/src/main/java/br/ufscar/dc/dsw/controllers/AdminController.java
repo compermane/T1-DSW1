@@ -61,12 +61,10 @@ public class AdminController extends HttpServlet {
 
 	public void getClientes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("[+] Método getClientes de AdminController executado");
-		Erro erros = new Erro();
 
 		List<Cliente> listaClientes = new ClienteDAO().getAll();
     	request.getSession().setAttribute("listaClientes", listaClientes);
 
-		request.setAttribute("mensagens", erros);
 	}
 
 	public void getLocadoras(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

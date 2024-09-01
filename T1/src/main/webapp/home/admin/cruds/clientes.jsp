@@ -31,8 +31,8 @@
             </c:if>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/cliente"><fmt:message key="admin.crud.cliente" /></a></li>
-                <li><a href="${pageContext.request.contextPath}/admin/locadora"><fmt:message key="admin.crud.locadora" /></a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/clientes"><fmt:message key="admin.crud.cliente" /></a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/locadoras"><fmt:message key="admin.crud.locadora" /></a></li>
             </ul>
             <div id = "clienteTableContainer">
                 <table id="clienteTable">
