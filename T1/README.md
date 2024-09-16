@@ -1,4 +1,4 @@
-# DSW1-T2
+# DSW1-T1
 Primeiro trabalho prático da disciplina Desenvolvimento de Software para Web 1 (DSW1) do Departamento de Computação (DC) da Universidade Federal de São Carlos (UFSCar). O objetivo desta atividade foi desenvolver um sistema de locação de bicicletas utilizando das seguintes tecnologias:
 
 ## Desenvolvimento
@@ -20,8 +20,6 @@ Abaixo encontra-se a abordagem do banco de dados adotada para o projeto.
 ### Modelo Entidade-Relacionamento 
 ![](images/der.png)
 
-### Tabelas SQL
-![](images/sql_tables.png)
 
 # Telas
 ## Página Inicial (index)
