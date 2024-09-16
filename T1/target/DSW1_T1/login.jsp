@@ -13,10 +13,15 @@
     </head>
 <body>
     <div class = "center-container">
+        <c:if test="${not empty param.error}">
+            <div class="error-message">
+                <h3><fmt:message key="not.found" /></h3>
+            </div>
+        </c:if>
         <c:if test="${not empty errorMessage}">
             <div class="erro">
                 <c:forEach var="erro" items="${errorMessage}">
-                    <h3>${erro}</h3>
+                    <h3><fmt:message key="${erro}" /></h3>
                 </c:forEach>
             </div>
         </c:if>

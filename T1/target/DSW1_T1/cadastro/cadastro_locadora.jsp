@@ -16,6 +16,13 @@
     <div class="center-container">
         <h1><fmt:message key="cadastro.locadora" /></h1>
         <div class="form-container">
+            <c:if test="${not empty mensagemErro}">
+                <div class="erro">
+                    <c:forEach var="erro" items="${mensagemErro}">
+                        <h3><fmt:message key="${erro}" /></h3>
+                    </c:forEach>
+                </div>
+            </c:if>
             <form action="${pageContext.request.contextPath}/signUp-locadora/insercao" method="post">
                 <label for="email"><fmt:message key="login.email" /></label>
                 <input class="registerInput" type="email" id="email" name="email" required><br>

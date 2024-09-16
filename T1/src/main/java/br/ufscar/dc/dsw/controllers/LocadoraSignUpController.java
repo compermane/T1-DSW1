@@ -116,7 +116,6 @@ public class LocadoraSignUpController extends HttpServlet {
 
             Usuario usuario = new Usuario(email, cnpj, senha, nome, admin, true);
             daoUsuario.insertUser(usuario);
-            System.out.println("id: " + usuario.getId());
             usuario = daoUsuario.getUserByEmail(email);
 
             String cidade = request.getParameter("cidade");

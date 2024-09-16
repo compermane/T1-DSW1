@@ -73,7 +73,7 @@ public class ClienteSignUpController extends HttpServlet {
             String email = request.getParameter("email");
             // Verificar se o email já existe
             if (daoUsuario.getUserByEmail(email) != null) {
-                String mensagemErro = "O email já está em uso.";
+                String mensagemErro = "error.email.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_cliente.jsp");
                 dispatcher.forward(request, response);
@@ -84,7 +84,7 @@ public class ClienteSignUpController extends HttpServlet {
 
             // Verificar se o CPF já existe
             if (daoCliente.getClienteByCPF(CPF) != null) {
-                String mensagemErro = "O CPF já está em uso.";
+                String mensagemErro = "error.cpf.already.inuse";
                 request.setAttribute("mensagemErro", mensagemErro);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastro/cadastro_cliente.jsp");
                 dispatcher.forward(request, response);

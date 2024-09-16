@@ -15,9 +15,8 @@
 <body>
     <div class="center-container">
         <div class="box-shadow">
-            <h1> <%= request.getAttribute("listaLocacoes") %> </h1>
             <h1><fmt:message key="sistema.locacao.bicicletas" /></h1>
-            <h2><fmt:message key="usuario.home.welcome"/> <%= request.getAttribute("nomeUsuario") %>!</h2>
+            <h2><fmt:message key="usuario.home.welcome"/>!</h2>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
             </ul>
@@ -29,7 +28,10 @@
                         <th><fmt:message key="cliente.home.dia" /></th>
                         <th><fmt:message key="cliente.home.horario" /></th>
                     </tr>
-                    <c:forEach var="locacao" items="${sessionScope.listaLocacoes}">
+                    <c:if test="${empty sessionScope.listaLocacoesLocadora}">
+                        <p>Nenhuma locação encontrada.</p>
+                    </c:if>
+                    <c:forEach var="locacao" items="${sessionScope.listaLocacoesLocadora}">
                         <tr>
                             <td>${locacao.cliente.nome}</td>
                             <td>${locacao.cliente.telefone}</td>

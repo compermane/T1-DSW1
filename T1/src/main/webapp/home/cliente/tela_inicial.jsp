@@ -16,7 +16,7 @@
     <div class="center-container">
         <div class="box-shadow">
             <h1><fmt:message key="sistema.locacao.bicicletas" /></h1>
-            <h2><fmt:message key="usuario.home.welcome"/> <%= request.getAttribute("nomeUsuario") %>!</h2>
+            <h2><fmt:message key="usuario.home.welcome"/>!</h2>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Logout</a></li>
                 <li><a href="${pageContext.request.contextPath}/cadastrar-locacao/"><fmt:message key="locacao.cadastrar" /></a></li>

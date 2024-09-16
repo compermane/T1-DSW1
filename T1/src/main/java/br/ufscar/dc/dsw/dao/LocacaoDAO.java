@@ -10,11 +10,48 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufscar.dc.dsw.domain.Cliente;
 import br.ufscar.dc.dsw.domain.Locacao;
 import br.ufscar.dc.dsw.domain.Locadora;
 
 public class LocacaoDAO extends GeralDAO{
+     public List<Locacao> getAllByLocadora(String cnpj) {
+        List<Locacao> listaLocacoesLocadora = new ArrayList<>();
+        String sqlQuery = "SELECT l.*, usr.nome AS nome, usr.id AS usuario_id, lo.id_locadora AS locadora_id, lo.cidade AS cidade FROM Locacao l" 
+                        + " JOIN Locadora lo ON l.CNPJ = lo.CNPJ"
+                        + " JOIN Cliente cl ON l.CPF = cl.CPF"
+                        + " JOIN Usuario usr ON lo.id_locadora = usr.id WHERE lo.CNPJ = ?;";
 
+        try {
+            Connection conn = this.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sqlQuery);
+
+            stmt.setString(1, cnpj);
+
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                String CPF = resultSet.getString("CPF");
+                String CNPJ = resultSet.getString("CNPJ");
+                Date dia = resultSet.getDate("dia");
+                Time horario = resultSet.getTime("horario");
+
+                Cliente cliente = new ClienteDAO().getClienteByCPF(CPF);
+                Locadora locadora = new Locadora(resultSet.getInt("locadora_id"), CNPJ, resultSet.getString("cidade"), resultSet.getString("nome"));
+                Locacao locacao = new Locacao(cliente, new LocadoraDAO().getLocadoraByCNPJ(CNPJ), dia, horario);
+
+                locacao.setLocadora(locadora);
+                listaLocacoesLocadora.add(locacao); 
+            }
+
+            resultSet.close();
+            stmt.close();
+            conn.close();
+        } 
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaLocacoesLocadora;
+    }
      public List<Locacao> getAll(int userID) {
         List<Locacao> listaLocacoes = new ArrayList<>();
         String sqlQuery = "SELECT l.*, usr.nome AS nome, usr.id AS usuario_id, lo.id_locadora AS locadora_id, lo.cidade AS cidade FROM Locacao l" 

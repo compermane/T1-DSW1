@@ -32,7 +32,7 @@ public class HomeController extends HttpServlet {
             request.getSession().setAttribute("listaLocacoes", listaLocacoes);
 
             // TODO: implementar forma para locadora acessar as locações
-            
+
             // Encaminhar para a página inicial
             if(usuario.getAdmin()) {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/home/admin/tela_inicial.jsp");
@@ -43,6 +43,13 @@ public class HomeController extends HttpServlet {
                 dispatcher.forward(request, response);
             }
             else {
+                List<Locacao> listaLocacoesLocadora = new LocacaoDAO().getAllByLocadora(usuario.getDocumento());
+
+                for (Locacao locacao : listaLocacoesLocadora) {
+                    System.out.println(locacao.getCliente().getNome());
+                }
+                request.getSession().setAttribute("listaLocacoesLocadora", listaLocacoesLocadora);
+                System.out.println("listaLocacoesLocadora: " + listaLocacoesLocadora);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/home/locadora/tela_inicial.jsp");
                 dispatcher.forward(request, response);
             }

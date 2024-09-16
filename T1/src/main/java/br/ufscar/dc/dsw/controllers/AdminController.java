@@ -28,7 +28,6 @@ public class AdminController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
-    	Erro erros = new Erro();
 
     	if(usuario == null) {
     		response.sendRedirect(request.getContextPath());
@@ -52,9 +51,8 @@ public class AdminController extends HttpServlet {
     		
     	} 
 		else {
-    		erros.add("acesso_negado_adm");
-    		request.setAttribute("mensagens", erros);
-    		RequestDispatcher rd = request.getRequestDispatcher("/noAuth.jsp");
+    		request.setAttribute("errorMessage", "nao.permido");
+    		RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
     		rd.forward(request, response);
     	}
     }

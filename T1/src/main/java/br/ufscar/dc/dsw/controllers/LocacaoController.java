@@ -92,8 +92,6 @@ public class LocacaoController extends HttpServlet {
             java.util.Date horario_sem_formatar = timeFormat.parse(horarioString);
             java.sql.Time horario = new java.sql.Time(horario_sem_formatar.getTime());
             
-            System.out.println("horario: " + horarioString);
-            System.out.println("data: " + data_sem_formatar);
             Locadora locadora = daoLocadora.getLocadoraByCNPJ(request.getParameter("locadoraSelect"));
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
             Locacao locacao = new Locacao(daoCliente.getClienteByID(usuario.getId()), locadora, dataLocacao, horario);

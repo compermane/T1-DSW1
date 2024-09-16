@@ -33,4 +33,9 @@
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/tela_inicial/*</url-pattern>
     </servlet-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/login.jsp?error=Pagina nao encontrada</location>
+    </error-page>
+
 </web-app>

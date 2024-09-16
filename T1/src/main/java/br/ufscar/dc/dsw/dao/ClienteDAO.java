@@ -84,7 +84,9 @@ public class ClienteDAO extends GeralDAO {
 
     public Cliente getClienteByCPF(String CPF) {
         Cliente cliente = null;
-        String sqlQuery = "SELECT * FROM Cliente WHERE CPF = ?;";
+        String sqlQuery = "SELECT cl.id_usuario AS id_usuario, cl.CPF AS CPF, cl.telefone AS telefone, cl.sexo AS sexo, cl.data_nascimento AS data_nascimento, " 
+                          + " usr.email AS email, usr.senha AS senha, usr.nome AS nome, usr.isAdmin AS isAdmin, usr.isLocadora AS isLocadora "
+                          + " FROM Cliente cl JOIN Usuario usr ON cl.CPF = usr.documento WHERE cl.CPF = ?;";
 
         try {
             Connection conn = this.getConnection();
@@ -95,16 +97,16 @@ public class ClienteDAO extends GeralDAO {
 
             if (resultSet.next()) {
                 int id = resultSet.getInt("id_usuario");
-                // String email = resultSet.getString("email");
-                // String senha = resultSet.getString("senha");
-                // String nome = resultSet.getString("nome");
-                // boolean admin = resultSet.getBoolean("isAdmin");
-                // boolean isLocadora = resultSet.getBoolean("isLocadora");
+                String email = resultSet.getString("email");
+                String senha = resultSet.getString("senha");
+                String nome = resultSet.getString("nome");
+                boolean admin = resultSet.getBoolean("isAdmin");
+                boolean isLocadora = resultSet.getBoolean("isLocadora");
                 String sexo = resultSet.getString("sexo");
                 String telefone = resultSet.getString("telefone");
                 Date dataNascimento = resultSet.getDate("data_nascimento");
 
-                cliente = new Cliente(id, CPF, telefone, sexo, dataNascimento);
+                cliente = new Cliente(id, CPF, email, senha, nome, admin, isLocadora, telefone, sexo, dataNascimento);
             }
 
             resultSet.close();
