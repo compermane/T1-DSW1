@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.ufscar.dc.dsw.services.spec.IClienteService;
 import br.ufscar.dc.dsw.domain.Cliente;
+import br.ufscar.dc.dsw.domain.ErrorResponse;
 
 @RestController
 public class ClienteRestController {
@@ -96,20 +97,37 @@ public class ClienteRestController {
 
     // Lista usuario por id
     @GetMapping(path = "/clientes/{id}")
-    private ResponseEntity<Cliente> lista(@PathVariable("id") Long id) {
-        Cliente cliente = clienteService.buscarPorID(id);
+    private ResponseEntity<?> lista(@PathVariable("id") Long id) {
+        try {
+            Cliente cliente = clienteService.buscarPorID(id);
 
-        if (cliente == null) {
-            return ResponseEntity.notFound().build();
+            if (cliente == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(cliente);
         }
+        catch (Exception e) {
+            ErrorResponse errorResponse;
+            HttpStatus httpStatus;
 
-        return ResponseEntity.ok(cliente);
+            if (e.getMessage().contains("não encontrado")) {
+                errorResponse = new ErrorResponse("Erro ao listar", HttpStatus.UNPROCESSABLE_ENTITY, "Cliente de id " + id + " não encontrado: " + e.getMessage());
+                httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+            }
+            else {
+                errorResponse = new ErrorResponse("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno: " + e.getMessage());
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+
+            return ResponseEntity.status(httpStatus).body(errorResponse);
+        }
     }
 
     // Cadastra cliente 
     @PostMapping(path = "/clientes")
     @ResponseBody
-    public ResponseEntity<Cliente> cadastrar(@RequestBody JSONObject json) {
+    public ResponseEntity<?> cadastrar(@RequestBody JSONObject json) {
         try {
             if (isJSONValid(json.toString())) {
                 Cliente cliente = new Cliente();
@@ -124,13 +142,19 @@ public class ClienteRestController {
         }
         catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            ErrorResponse errorResponse;
+            if (e.getMessage().contains("cannot be null")) 
+                errorResponse = new ErrorResponse("Erro no processamento", HttpStatus.UNPROCESSABLE_ENTITY, "Campos inválidos");
+            else 
+                errorResponse = new ErrorResponse("Erro no procesamento", HttpStatus.UNPROCESSABLE_ENTITY, "Email ou CPF já cadastrados: " + e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
         }
     }
 
     // Atualiza um cliente
     @PutMapping(path = "/clientes/{id}")
-    public ResponseEntity<Cliente> atualiza(@PathVariable("id") Long id, @RequestBody JSONObject json) {
+    public ResponseEntity<?> atualiza(@PathVariable("id") Long id, @RequestBody JSONObject json) {
         try {
             if (isJSONValid(json.toString())) {
                 Cliente cliente = clienteService.buscarPorID(id);
@@ -149,20 +173,44 @@ public class ClienteRestController {
             }
         }
         catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            e.printStackTrace();
+            ErrorResponse errorResponse;
+
+            if (e.getMessage().contains("não encontrada")) 
+                errorResponse = new ErrorResponse("Erro ao atualizar", HttpStatus.UNPROCESSABLE_ENTITY, "Cliente de id " + id + " não encontrada: " + e.getMessage());
+            else {
+                errorResponse = new ErrorResponse("Erro ao atualizar", HttpStatus.UNPROCESSABLE_ENTITY, "Campos inválidos: " + e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
         }
     }
 
     // Deleta um cliente por id
     @DeleteMapping(path = "/clientes/{id}")
-    public ResponseEntity<Boolean> deleta(@PathVariable("id") Long id) {
-        Cliente cliente = clienteService.buscarPorID(id);
+    public ResponseEntity<?> deleta(@PathVariable("id") Long id) {
+        try {
+            Cliente cliente = clienteService.buscarPorID(id);
 
-        if (cliente == null) {
-            return ResponseEntity.notFound().build();
+            if (cliente == null) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            clienteService.excluir(id);
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        } 
+        catch (Exception e) {
+            ErrorResponse errorResponse;
+            HttpStatus httpStatus;
+            if (e.getMessage().contains("não encontrado")) {
+                errorResponse = new ErrorResponse("Erro ao deletar", HttpStatus.UNPROCESSABLE_ENTITY, "Cliente de id " + id + " não encontrado: " + e.getMessage());
+                httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+            }
+            else {
+                errorResponse = new ErrorResponse("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno: " + e.getMessage());
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+
+            return ResponseEntity.status(httpStatus).body(errorResponse);
         }
-        
-        clienteService.excluir(id);
-        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 }

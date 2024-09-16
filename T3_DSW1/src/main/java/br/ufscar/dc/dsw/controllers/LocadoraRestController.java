@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.ufscar.dc.dsw.services.spec.ILocadoraService;
+import br.ufscar.dc.dsw.domain.ErrorResponse;
 import br.ufscar.dc.dsw.domain.Locadora;
 
 @RestController
@@ -78,22 +79,67 @@ public class LocadoraRestController {
         return ResponseEntity.ok(listaLocadoras);
     }
 
+    // Lista locadora por cidade
+    @GetMapping(path = "/locadoras/cidades/{nome}")
+    private ResponseEntity<?> lista(@PathVariable("nome") String nome) {
+        try {
+            List<Locadora> locadoras = locadoraService.buscarPorCidade(nome);
+
+            if (locadoras == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(locadoras);
+        }
+        catch(Exception e) {
+            ErrorResponse errorResponse;
+            HttpStatus httpStatus;
+
+            if (e.getMessage().contains("não encontrada")) {
+                errorResponse = new ErrorResponse("Erro ao listar", HttpStatus.UNPROCESSABLE_ENTITY, "Locadoras de cidade " + nome + " não encontrada: " + e.getMessage());
+                httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+            }
+            else {
+                errorResponse = new ErrorResponse("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno: " + e.getMessage());
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+
+            return ResponseEntity.status(httpStatus).body(errorResponse);
+        }
+    }
     // Lista locadora por id
     @GetMapping(path = "/locadoras/{id}")
-    private ResponseEntity<Locadora> lista(@PathVariable("id") Long id) {
-        Locadora locadora = locadoraService.buscarPorID(id);
+    private ResponseEntity<?> lista(@PathVariable("id") Long id) {
+        try {
+            Locadora locadora = locadoraService.buscarPorID(id);
 
-        if (locadora == null) {
-            return ResponseEntity.notFound().build();
+            if (locadora == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(locadora);
         }
+        catch(Exception e) {
+            ErrorResponse errorResponse;
+            HttpStatus httpStatus;
 
-        return ResponseEntity.ok(locadora);
+            if (e.getMessage().contains("não encontrada")) {
+                errorResponse = new ErrorResponse("Erro ao listar", HttpStatus.UNPROCESSABLE_ENTITY, "Locadora de id " + id + " não encontrada: " + e.getMessage());
+                httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+            }
+            else {
+                errorResponse = new ErrorResponse("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno: " + e.getMessage());
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+
+            return ResponseEntity.status(httpStatus).body(errorResponse);
+        }
     }
 
     // Cadastra locadora 
     @PostMapping(path = "/locadoras")
     @ResponseBody
-    public ResponseEntity<Locadora> cadastrar(@RequestBody JSONObject json) {
+    public ResponseEntity<?> cadastrar(@RequestBody JSONObject json) {
         try {
             if (isJSONValid(json.toString())) {
                 Locadora locadora = new Locadora();
@@ -108,13 +154,19 @@ public class LocadoraRestController {
         }
         catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            ErrorResponse errorResponse;
+            if (e.getMessage().contains("cannot be null")) 
+                errorResponse = new ErrorResponse("Erro no processamento", HttpStatus.UNPROCESSABLE_ENTITY, "Campos inválidos");
+            else 
+                errorResponse = new ErrorResponse("Erro no procesamento", HttpStatus.UNPROCESSABLE_ENTITY, "Email ou CNPJ já cadastrados: " + e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
         }
     }
 
     // Atualiza um locadora
     @PutMapping(path = "/locadoras/{id}")
-    public ResponseEntity<Locadora> atualiza(@PathVariable("id") Long id, @RequestBody JSONObject json) {
+    public ResponseEntity<?> atualiza(@PathVariable("id") Long id, @RequestBody JSONObject json) {
         try {
             if (isJSONValid(json.toString())) {
                 Locadora locadora = locadoraService.buscarPorID(id);
@@ -133,20 +185,45 @@ public class LocadoraRestController {
             }
         }
         catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            e.printStackTrace();
+            ErrorResponse errorResponse;
+
+            if (e.getMessage().contains("não encontrada")) 
+                errorResponse = new ErrorResponse("Erro ao atualizar", HttpStatus.UNPROCESSABLE_ENTITY, "Locadora de id " + id + " não encontrada: " + e.getMessage());
+            else {
+                errorResponse = new ErrorResponse("Erro ao atualizaar", HttpStatus.UNPROCESSABLE_ENTITY, "Campos inválidos: " + e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
         }
     }
 
     // Deleta um locadora por id
     @DeleteMapping(path = "/locadoras/{id}")
-    public ResponseEntity<Boolean> deleta(@PathVariable("id") Long id) {
-        Locadora locadora = locadoraService.buscarPorID(id);
+    public ResponseEntity<?> deleta(@PathVariable("id") Long id) {
+        try {
+            Locadora locadora = locadoraService.buscarPorID(id);
 
-        if (locadora == null) {
-            return ResponseEntity.notFound().build();
+            if (locadora == null) {
+                System.err.println("BRUH");
+                return ResponseEntity.notFound().build();
+            }
+            
+            locadoraService.excluir(id);
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
         }
-        
-        locadoraService.excluir(id);
-        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        catch(Exception e) {
+            ErrorResponse errorResponse;
+            HttpStatus httpStatus;
+            if (e.getMessage().contains("não encontrada")) {
+                errorResponse = new ErrorResponse("Erro ao deletar", HttpStatus.UNPROCESSABLE_ENTITY, "Locadora de id " + id + " não encontrada: " + e.getMessage());
+                httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+            }
+            else {
+                errorResponse = new ErrorResponse("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno: " + e.getMessage());
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+
+            return ResponseEntity.status(httpStatus).body(errorResponse);
+        }
     }
 }

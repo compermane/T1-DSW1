@@ -39,35 +39,62 @@ public class LocacaoRestController {
 	
     //Lista as locações por ID
     @GetMapping(path = "/locacoes/{id}")
-	public ResponseEntity<Locacao> listaPorId(@PathVariable("id") long id) {
-    	Locacao locacao = locacaoService.buscarPorID(id);
-		if (locacao == null) {
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<?> listaPorId(@PathVariable("id") long id) {
+		try {
+			Locacao locacao = locacaoService.buscarPorID(id);
+			if (locacao == null) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok(locacao);
 		}
-		return ResponseEntity.ok(locacao);
+		catch (Exception e) {
+			if (e.getMessage().contains("não encontrada")) {
+				return ResponseEntity.notFound().build();
+			}
+
+			return ResponseEntity.badRequest().body("Erro interno");
+		}
 	}
 
     // Lista as locações de um cliente por seu ID
 	@GetMapping(path = "/locacoes/clientes/{id}")
-	public ResponseEntity<List<Locacao>> listaPorCliente(@PathVariable("id") long id) {
-        Cliente cliente = clienteService.buscarPorID(id);
-		List<Locacao> listaClientes = locacaoService.buscarTodosPorCliente(cliente);
+	public ResponseEntity<?> listaPorCliente(@PathVariable("id") long id) {
+		try {
+			Cliente cliente = clienteService.buscarPorID(id);
+			List<Locacao> listaClientes = locacaoService.buscarTodosPorCliente(cliente);
 
-		if (listaClientes.isEmpty()) {
-			return ResponseEntity.notFound().build();
+			if (listaClientes.isEmpty()) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok(listaClientes);
 		}
-		return ResponseEntity.ok(listaClientes);
+		catch (Exception e) {
+			if (e.getMessage().contains("não encontrada")) {
+				return ResponseEntity.notFound().build();
+			}
+
+			return ResponseEntity.badRequest().body("Erro interno");
+		}
 	}
 
     // Lista as locações de uma locadora por seu ID
     @GetMapping(path = "/locacoes/locadoras/{id}")
-	public ResponseEntity<List<Locacao>> listaPorLocadora(@PathVariable("id") long id) {
-        Locadora locadora = locadoraService.buscarPorID(id);
-		List<Locacao> listaLocadoras = locacaoService.buscarTodosPorLocadora(locadora);
+	public ResponseEntity<?> listaPorLocadora(@PathVariable("id") long id) {
+		try {
+			Locadora locadora = locadoraService.buscarPorID(id);
+			List<Locacao> listaLocadoras = locacaoService.buscarTodosPorLocadora(locadora);
 
-		if (listaLocadoras.isEmpty()) {
-			return ResponseEntity.notFound().build();
+			if (listaLocadoras.isEmpty()) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok(listaLocadoras);
 		}
-		return ResponseEntity.ok(listaLocadoras);
+		catch(Exception e) {
+			if (e.getMessage().contains("não encontrada")) {
+				return ResponseEntity.notFound().build();
+			}
+
+			return ResponseEntity.badRequest().body("Erro interno");
+		}
 	}
 }
